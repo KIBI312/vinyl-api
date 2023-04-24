@@ -1,0 +1,19 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    container_name: pgdb
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=${POSTGRES_PASS}
+      - POSTGRES_DB=vinylApi
+    networks:
+      - vinylApi
+networks:
+  vinylApi:
+    name: vinylApi
+    driver: bridge
+
+
