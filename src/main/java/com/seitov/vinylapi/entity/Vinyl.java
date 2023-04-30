@@ -17,11 +17,12 @@ public class Vinyl {
     private Double price;
     private Boolean inStock;
     private String recordLabel;
-    @ManyToMany
-    @JoinTable(name = "vinyl_category",
-            joinColumns = @JoinColumn(name = "vinyl_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private List<Category> categories;
+    @OneToOne
+    private Format format;
+    @OneToMany
+    private List<Genre> genres;
+    @OneToMany
+    private List<Artist> artists;
     @ManyToMany
     @JoinTable(name = "vinyl_soundtrack",
             joinColumns = @JoinColumn(name = "vinyl_id"),

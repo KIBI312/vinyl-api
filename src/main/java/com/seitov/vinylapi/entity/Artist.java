@@ -2,11 +2,14 @@ package com.seitov.vinylapi.entity;
 
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 @Entity
 @Data
-public class Category {
+public class Artist {
 
     @Id
     @GeneratedValue
@@ -15,11 +18,5 @@ public class Category {
     private String description;
     @OneToOne
     private Image photo;
-    @Enumerated(EnumType.STRING)
-    private Type type;
-
-    public enum Type {
-        artist, genre, format, decade
-    }
 
 }
