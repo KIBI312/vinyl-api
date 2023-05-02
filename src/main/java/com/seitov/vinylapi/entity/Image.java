@@ -1,11 +1,9 @@
 package com.seitov.vinylapi.entity;
 
 import lombok.Data;
+import org.hibernate.annotations.Type;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Lob;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -15,6 +13,8 @@ public class Image {
     @GeneratedValue
     private Long id;
     @Lob
+    @Type(type = "org.hibernate.type.BinaryType")
     private byte[] content;
 
 }
+
