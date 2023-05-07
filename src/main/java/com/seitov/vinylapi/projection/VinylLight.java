@@ -11,16 +11,11 @@ public interface VinylLight {
     FormatName getFormat();
     PhotoId getPhotoLowRes();
 
-    interface FormatName {
-        String getName();
-    }
-
-    interface ArtistName {
-        String getName();
-    }
-
-    interface PhotoId {
-        Long getId();
-    }
+    void setId(Long id);
+    void setName(String name);
+    void setPrice(Double price);
+    void setArtists(List<ArtistName> artists);
+    void setFormat(FormatName name);
+    void setPhotoLowRes(PhotoId photoId);
 
 }
