@@ -1,6 +1,7 @@
 package com.seitov.vinylapi.config;
 
 import com.seitov.vinylapi.dto.VinylLightDto;
+import com.seitov.vinylapi.projection.ArtistName;
 import com.seitov.vinylapi.projection.VinylLight;
 import ma.glasnost.orika.CustomMapper;
 import ma.glasnost.orika.MapperFacade;
@@ -27,7 +28,7 @@ public class OrikaMapperConfig {
                         vinylLightDto.setName(vinylLight.getName());
                         vinylLightDto.setPrice(vinylLight.getPrice());
                         vinylLightDto.setArtist(vinylLight.getArtists().stream()
-                                .map(VinylLight.ArtistName::getName)
+                                .map(ArtistName::getName)
                                 .collect(Collectors.toList()));
                         vinylLightDto.setFormat(vinylLight.getFormat().getName());
                         vinylLightDto.setPhotoId(vinylLight.getPhotoLowRes().getId());
