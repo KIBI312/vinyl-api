@@ -1,8 +1,8 @@
 package com.seitov.vinylapi.config;
 
+import com.seitov.vinylapi.dto.VinylDto;
 import com.seitov.vinylapi.dto.VinylLightDto;
-import com.seitov.vinylapi.projection.ArtistName;
-import com.seitov.vinylapi.projection.VinylLight;
+import com.seitov.vinylapi.projection.*;
 import ma.glasnost.orika.CustomMapper;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
@@ -33,7 +33,30 @@ public class OrikaMapperConfig {
                         vinylLightDto.setFormat(vinylLight.getFormat().getName());
                         vinylLightDto.setPhotoId(vinylLight.getPhotoLowRes().getId());
                     }
-                }).byDefault().register();
+                }).register();
+        mapperFactory.classMap(VinylDetails.class, VinylDto.class)
+                .customize(new CustomMapper<VinylDetails, VinylDto>() {
+                    @Override
+                    public void mapAtoB(VinylDetails vinylDetails, VinylDto vinylDto, MappingContext context) {
+                        vinylDto.setId(vinylDetails.getId());
+                        vinylDto.setName(vinylDetails.getName());
+                        vinylDto.setDescription(vinylDetails.getDescription());
+                        vinylDto.setPrice(vinylDetails.getPrice());
+                        vinylDto.setArtists(vinylDetails.getArtists().stream()
+                                .map(ArtistName::getName)
+                                .collect(Collectors.toList()));
+                        vinylDto.setGenres(vinylDetails.getGenres().stream()
+                                .map(GenreName::getName)
+                                .collect(Collectors.toList()));
+                        vinylDto.setFormat(vinylDetails.getFormat().getName());
+                        vinylDto.setInStock(vinylDetails.getInStock());
+                        vinylDto.setRecordLabel(vinylDetails.getRecordLabel());
+                        vinylDto.setTrackList(vinylDetails.getTrackList().stream()
+                                .map(SoundtrackName::getName)
+                                .collect(Collectors.toList()));
+                        vinylDto.setPhotoId(vinylDetails.getPhotoHighRes().getId());
+                    }
+                }).register();
         return mapperFactory.getMapperFacade();
     }
 
