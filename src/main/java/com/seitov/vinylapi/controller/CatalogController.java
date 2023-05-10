@@ -3,6 +3,7 @@ package com.seitov.vinylapi.controller;
 import com.seitov.vinylapi.dto.ResponseMessage;
 import com.seitov.vinylapi.dto.VinylDto;
 import com.seitov.vinylapi.dto.VinylLightDto;
+import com.seitov.vinylapi.entity.Format;
 import com.seitov.vinylapi.service.CatalogService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -79,5 +80,14 @@ public class CatalogController {
         return catalogService.getVinylsLightByFormat(id);
     }
 
+    @Operation(description = "Get array of Formats", tags = "catalog")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", content =
+            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    array = @ArraySchema(schema = @Schema(implementation = Format.class))))})
+    @GetMapping("/formats")
+    public List<Format> getFormats() {
+        return catalogService.getFormats();
+    }
 
 }

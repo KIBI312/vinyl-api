@@ -2,9 +2,13 @@ package com.seitov.vinylapi.service;
 
 import com.seitov.vinylapi.dto.VinylDto;
 import com.seitov.vinylapi.dto.VinylLightDto;
+import com.seitov.vinylapi.entity.Format;
 import com.seitov.vinylapi.exception.ResourceNotFoundException;
 import com.seitov.vinylapi.projection.VinylDetails;
 import com.seitov.vinylapi.projection.VinylLight;
+import com.seitov.vinylapi.repository.ArtistRepository;
+import com.seitov.vinylapi.repository.FormatRepository;
+import com.seitov.vinylapi.repository.GenreRepository;
 import com.seitov.vinylapi.repository.VinylRepository;
 import ma.glasnost.orika.MapperFacade;
 import org.springframework.data.domain.PageRequest;
@@ -18,10 +22,18 @@ import java.util.Optional;
 public class CatalogService {
 
     private final VinylRepository vinylRepository;
+    private final FormatRepository formatRepository;
+    private final GenreRepository genreRepository;
+    private final ArtistRepository artistRepository;
     private final MapperFacade orikaMapper;
 
-    public CatalogService(VinylRepository vinylRepository, MapperFacade orikaMapper) {
+    public CatalogService(VinylRepository vinylRepository, FormatRepository formatRepository,
+                          GenreRepository genreRepository, ArtistRepository artistRepository,
+                          MapperFacade orikaMapper) {
         this.vinylRepository = vinylRepository;
+        this.formatRepository = formatRepository;
+        this.artistRepository = artistRepository;
+        this.genreRepository = genreRepository;
         this.orikaMapper = orikaMapper;
     }
 
@@ -49,6 +61,10 @@ public class CatalogService {
 
     public List<VinylLightDto> getVinylsLightByFormat(Long id) {
         return orikaMapper.mapAsList(vinylRepository.readByFormat_Id(id, VinylLight.class), VinylLightDto.class);
+    }
+
+    public List<Format> getFormats() {
+        return formatRepository.findAll();
     }
 
 
