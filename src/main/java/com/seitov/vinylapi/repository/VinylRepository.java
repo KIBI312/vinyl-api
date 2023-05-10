@@ -12,6 +12,11 @@ import java.util.Optional;
 public interface VinylRepository extends JpaRepository<Vinyl, Long> {
 
     <T> List<T> findAllProjectedBy(Pageable pageable, Class<T> type);
+    <T> List<T> readByArtists_Id(Long id, Class<T> type);
+
+    <T> List<T> readByFormat_Id(Long id, Class<T> type);
+
+    <T> List<T> readByGenres_Id(Long id, Class<T> type);
     <T> Optional<T> readById(Long id, Class<T> type);
 
 }

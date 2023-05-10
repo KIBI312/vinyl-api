@@ -39,6 +39,18 @@ public class CatalogService {
         return orikaMapper.map(vinylDetails.get(), VinylDto.class);
     }
 
+    public List<VinylLightDto> getVinylsLightByArtist(Long id) {
+        return orikaMapper.mapAsList(vinylRepository.readByArtists_Id(id, VinylLight.class), VinylLightDto.class);
+    }
+
+    public List<VinylLightDto> getVinylsLightByGenre(Long id) {
+        return orikaMapper.mapAsList(vinylRepository.readByGenres_Id(id, VinylLight.class), VinylLightDto.class);
+    }
+
+    public List<VinylLightDto> getVinylsLightByFormat(Long id) {
+        return orikaMapper.mapAsList(vinylRepository.readByFormat_Id(id, VinylLight.class), VinylLightDto.class);
+    }
+
 
 
 

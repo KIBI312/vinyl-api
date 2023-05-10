@@ -21,8 +21,6 @@ public class CatalogController {
 
     private final CatalogService catalogService;
 
-    private final ResponseMessage noFoundExample = new ResponseMessage();
-
     public CatalogController(CatalogService catalogService) {
         this.catalogService = catalogService;
     }
@@ -49,6 +47,37 @@ public class CatalogController {
         return catalogService.getVinylById(id);
     }
 
+    @Operation(description = "Get array of vinyls filtered by Artist", tags = "catalog")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", content =
+            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    array = @ArraySchema(schema = @Schema(implementation = VinylLightDto.class))))})
+    @GetMapping("/artists/{id}/vinyls")
+    public List<VinylLightDto> getVinylsByArtist(@PathVariable Long id) {
+        return catalogService.getVinylsLightByArtist(id);
+    }
+
+
+    @Operation(description = "Get array of vinyls filtered by Genre", tags = "catalog")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", content =
+            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    array = @ArraySchema(schema = @Schema(implementation = VinylLightDto.class))))})
+    @GetMapping("/genres/{id}/vinyls")
+    public List<VinylLightDto> getVinylsByGenre(@PathVariable Long id) {
+        return catalogService.getVinylsLightByGenre(id);
+    }
+
+
+    @Operation(description = "Get array of vinyls filtered by Format", tags = "catalog")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", content =
+            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    array = @ArraySchema(schema = @Schema(implementation = VinylLightDto.class))))})
+    @GetMapping("/formats/{id}/vinyls")
+    public List<VinylLightDto> getVinylsByFormat(@PathVariable Long id) {
+        return catalogService.getVinylsLightByFormat(id);
+    }
 
 
 }
