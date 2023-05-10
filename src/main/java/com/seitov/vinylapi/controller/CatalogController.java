@@ -5,6 +5,7 @@ import com.seitov.vinylapi.dto.ResponseMessage;
 import com.seitov.vinylapi.dto.VinylDto;
 import com.seitov.vinylapi.dto.VinylLightDto;
 import com.seitov.vinylapi.entity.Format;
+import com.seitov.vinylapi.entity.Genre;
 import com.seitov.vinylapi.service.CatalogService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -105,6 +106,16 @@ public class CatalogController {
     @GetMapping("/artists")
     public List<ArtistDto> getArtists(@RequestParam Integer page) {
         return catalogService.getArtists(page);
+    }
+
+    @Operation(description = "Get array of Genres", tags = "catalog")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", content =
+            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    array = @ArraySchema(schema = @Schema(implementation = Genre.class))))})
+    @GetMapping("/genres")
+    public List<Genre> getGenres() {
+        return catalogService.getGenres();
     }
 
 }
