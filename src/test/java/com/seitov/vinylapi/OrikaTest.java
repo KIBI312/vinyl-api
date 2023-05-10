@@ -1,5 +1,6 @@
 package com.seitov.vinylapi;
 
+import com.seitov.vinylapi.dto.ArtistDto;
 import com.seitov.vinylapi.dto.VinylDto;
 import com.seitov.vinylapi.dto.VinylLightDto;
 import com.seitov.vinylapi.projection.*;
@@ -90,6 +91,26 @@ public class OrikaTest {
         vinylLightDto.setPhotoId(1L);
         //then
         assertEquals(vinylLightDto, orikaMapper.map(vinylLight, VinylLightDto.class));
+    }
+
+    @Test
+    public void testArtistDetailsToArtistDto() {
+        //given
+        ArtistDetails artistDetails = factory.createProjection(ArtistDetails.class);
+        PhotoId photoId = factory.createProjection(PhotoId.class);
+        photoId.setId(1L);
+        artistDetails.setId(0L);
+        artistDetails.setName("MichaelJ");
+        artistDetails.setDescription("Legendary legend of pop and rock");
+        artistDetails.setPhoto(photoId);
+
+        ArtistDto artistDto = new ArtistDto();
+        artistDto.setId(0L);
+        artistDto.setName("MichaelJ");
+        artistDto.setDescription("Legendary legend of pop and rock");
+        artistDto.setPhotoId(1L);
+        //then
+        assertEquals(artistDto, orikaMapper.map(artistDetails, ArtistDto.class));
 
     }
 
