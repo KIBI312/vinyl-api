@@ -1,9 +1,11 @@
 package com.seitov.vinylapi.service;
 
+import com.seitov.vinylapi.dto.ArtistDto;
 import com.seitov.vinylapi.dto.VinylDto;
 import com.seitov.vinylapi.dto.VinylLightDto;
 import com.seitov.vinylapi.entity.Format;
 import com.seitov.vinylapi.exception.ResourceNotFoundException;
+import com.seitov.vinylapi.projection.ArtistDetails;
 import com.seitov.vinylapi.projection.VinylDetails;
 import com.seitov.vinylapi.projection.VinylLight;
 import com.seitov.vinylapi.repository.ArtistRepository;
@@ -65,6 +67,11 @@ public class CatalogService {
 
     public List<Format> getFormats() {
         return formatRepository.findAll();
+    }
+
+    public List<ArtistDto> getArtists(Integer page) {
+        Pageable pageable = PageRequest.of(page, 50);
+        return orikaMapper.mapAsList(artistRepository.findAllProjectedBy(pageable, ArtistDetails.class), ArtistDto.class);
     }
 
 

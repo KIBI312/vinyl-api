@@ -1,5 +1,6 @@
 package com.seitov.vinylapi.controller;
 
+import com.seitov.vinylapi.dto.ArtistDto;
 import com.seitov.vinylapi.dto.ResponseMessage;
 import com.seitov.vinylapi.dto.VinylDto;
 import com.seitov.vinylapi.dto.VinylLightDto;
@@ -30,7 +31,10 @@ public class CatalogController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", content =
                     @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            array = @ArraySchema(schema = @Schema(implementation = VinylLightDto.class))))})
+                            array = @ArraySchema(schema = @Schema(implementation = VinylLightDto.class)))),
+            @ApiResponse(responseCode = "400", description = "Missing required 'page' parameter",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ResponseMessage.class)))})
     @GetMapping("/vinyls")
     public List<VinylLightDto> getVinyls(@RequestParam Integer page) {
         return catalogService.getVinylsLight(page);
@@ -88,6 +92,19 @@ public class CatalogController {
     @GetMapping("/formats")
     public List<Format> getFormats() {
         return catalogService.getFormats();
+    }
+
+    @Operation(description = "Get array of Artists", tags = "catalog")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", content =
+            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    array = @ArraySchema(schema = @Schema(implementation = ArtistDto.class)))),
+            @ApiResponse(responseCode = "400", description = "Missing required 'page' parameter",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = ResponseMessage.class)))})
+    @GetMapping("/artists")
+    public List<ArtistDto> getArtists(@RequestParam Integer page) {
+        return catalogService.getArtists(page);
     }
 
 }
