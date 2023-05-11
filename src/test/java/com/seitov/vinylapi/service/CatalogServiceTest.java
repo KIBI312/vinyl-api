@@ -2,6 +2,8 @@ package com.seitov.vinylapi.service;
 
 import com.seitov.vinylapi.dto.VinylDto;
 import com.seitov.vinylapi.dto.VinylLightDto;
+import com.seitov.vinylapi.entity.Format;
+import com.seitov.vinylapi.entity.Genre;
 import com.seitov.vinylapi.exception.ResourceNotFoundException;
 import com.seitov.vinylapi.projection.*;
 import com.seitov.vinylapi.repository.VinylRepository;
@@ -42,13 +44,11 @@ public class CatalogServiceTest {
         //given
         VinylDetails vinylDetails = factory.createProjection(VinylDetails.class);
         ArtistName artistName = factory.createProjection(ArtistName.class);
-        FormatName formatName = factory.createProjection(FormatName.class);
-        GenreName genreName = factory.createProjection(GenreName.class);
         PhotoId photoId = factory.createProjection(PhotoId.class);
         SoundtrackName trackName = factory.createProjection(SoundtrackName.class);
+        Format format = new Format(1L, "2LP");
+        Genre genre = new Genre(1L, "Pop-Rock");
         artistName.setName("MichaelJ");
-        formatName.setName("2LP");
-        genreName.setName("Pop");
         trackName.setName("Billy jeans");
         photoId.setId(1L);
         vinylDetails.setId(0L);
@@ -56,8 +56,8 @@ public class CatalogServiceTest {
         vinylDetails.setDescription("Legendary album of legendary artist");
         vinylDetails.setPrice(20.99);
         vinylDetails.setArtists(List.of(artistName));
-        vinylDetails.setGenres(List.of(genreName));
-        vinylDetails.setFormat(formatName);
+        vinylDetails.setGenres(List.of(genre));
+        vinylDetails.setFormat(format);
         vinylDetails.setInStock(true);
         vinylDetails.setRecordLabel("EMI");
         vinylDetails.setTrackList(List.of(trackName));
@@ -68,9 +68,9 @@ public class CatalogServiceTest {
         vinylDto.setName("Moonwalk");
         vinylDto.setDescription("Legendary album of legendary artist");
         vinylDto.setPrice(20.99);
-        vinylDto.setArtists(List.of("MichaelJ"));
-        vinylDto.setGenres(List.of("Pop"));
-        vinylDto.setFormat("Pop");
+        vinylDto.setArtists(List.of(artistName));
+        vinylDto.setGenres(List.of(genre));
+        vinylDto.setFormat(format);
         vinylDto.setInStock(true);
         vinylDto.setRecordLabel("EMI");
         vinylDto.setTrackList(List.of("Billy jeans"));

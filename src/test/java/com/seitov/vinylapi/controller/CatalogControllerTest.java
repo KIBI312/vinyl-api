@@ -2,13 +2,18 @@ package com.seitov.vinylapi.controller;
 
 import com.seitov.vinylapi.dto.VinylDto;
 import com.seitov.vinylapi.dto.VinylLightDto;
+import com.seitov.vinylapi.entity.Format;
+import com.seitov.vinylapi.entity.Genre;
 import com.seitov.vinylapi.exception.ResourceNotFoundException;
+import com.seitov.vinylapi.projection.ArtistName;
 import com.seitov.vinylapi.service.CatalogService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.projection.ProjectionFactory;
+import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
@@ -30,6 +35,8 @@ public class CatalogControllerTest {
 
     @MockBean
     CatalogService catalogService;
+
+    private final ProjectionFactory factory = new SpelAwareProxyProjectionFactory();
 
     @Test
     public void getAllVinyls() throws Exception {
@@ -66,14 +73,19 @@ public class CatalogControllerTest {
     @Test
     public void  getVinyl() throws Exception {
         //given
+        ArtistName artistName = factory.createProjection(ArtistName.class);
+        artistName.setId(1L);
+        artistName.setName("MichaelJ");
+        Format format = new Format(1L, "2LP");
+        Genre genre = new Genre(1L, "Pop");
         VinylDto vinylDto = new VinylDto();
         vinylDto.setId(0L);
         vinylDto.setName("Moonwalk");
         vinylDto.setDescription("Legendary album of legendary artist");
         vinylDto.setPrice(20.99);
-        vinylDto.setArtists(List.of("MichaelJ"));
-        vinylDto.setGenres(List.of("Pop"));
-        vinylDto.setFormat("Pop");
+        vinylDto.setArtists(List.of(artistName));
+        vinylDto.setGenres(List.of(genre));
+        vinylDto.setFormat(format);
         vinylDto.setInStock(true);
         vinylDto.setRecordLabel("EMI");
         vinylDto.setTrackList(List.of("Billy jeans", "Smooth criminal"));
@@ -87,9 +99,9 @@ public class CatalogControllerTest {
                 .andExpect(jsonPath("$.name", is("Moonwalk")))
                 .andExpect(jsonPath("$.description", is("Legendary album of legendary artist")))
                 .andExpect(jsonPath("$.price", is(20.99)))
-                .andExpect(jsonPath("$.artists[0]", is("MichaelJ")))
-                .andExpect(jsonPath("$.genres[0]", is("Pop")))
-                .andExpect(jsonPath("$.format", is("Pop")))
+                .andExpect(jsonPath("$.artists[0].name", is("MichaelJ")))
+                .andExpect(jsonPath("$.genres[0].name", is("Pop")))
+                .andExpect(jsonPath("$.format.name", is("2LP")))
                 .andExpect(jsonPath("$.inStock", is(true)))
                 .andExpect(jsonPath("$.recordLabel", is("EMI")))
                 .andExpect(jsonPath("$.trackList", hasSize(2)))

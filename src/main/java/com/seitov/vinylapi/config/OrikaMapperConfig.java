@@ -28,10 +28,8 @@ public class OrikaMapperConfig {
                         vinylLightDto.setId(vinylLight.getId());
                         vinylLightDto.setName(vinylLight.getName());
                         vinylLightDto.setPrice(vinylLight.getPrice());
-                        vinylLightDto.setArtist(vinylLight.getArtists().stream()
-                                .map(ArtistName::getName)
-                                .collect(Collectors.toList()));
-                        vinylLightDto.setFormat(vinylLight.getFormat().getName());
+                        vinylLightDto.setArtists(vinylLight.getArtists());
+                        vinylLightDto.setFormat(vinylLight.getFormat());
                         vinylLightDto.setPhotoId(vinylLight.getPhotoLowRes().getId());
                     }
                 }).register();
@@ -43,13 +41,9 @@ public class OrikaMapperConfig {
                         vinylDto.setName(vinylDetails.getName());
                         vinylDto.setDescription(vinylDetails.getDescription());
                         vinylDto.setPrice(vinylDetails.getPrice());
-                        vinylDto.setArtists(vinylDetails.getArtists().stream()
-                                .map(ArtistName::getName)
-                                .collect(Collectors.toList()));
-                        vinylDto.setGenres(vinylDetails.getGenres().stream()
-                                .map(GenreName::getName)
-                                .collect(Collectors.toList()));
-                        vinylDto.setFormat(vinylDetails.getFormat().getName());
+                        vinylDto.setArtists(vinylDetails.getArtists());
+                        vinylDto.setGenres(vinylDetails.getGenres());
+                        vinylDto.setFormat(vinylDetails.getFormat());
                         vinylDto.setInStock(vinylDetails.getInStock());
                         vinylDto.setRecordLabel(vinylDetails.getRecordLabel());
                         vinylDto.setTrackList(vinylDetails.getTrackList().stream()

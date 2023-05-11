@@ -3,6 +3,8 @@ package com.seitov.vinylapi;
 import com.seitov.vinylapi.dto.ArtistDto;
 import com.seitov.vinylapi.dto.VinylDto;
 import com.seitov.vinylapi.dto.VinylLightDto;
+import com.seitov.vinylapi.entity.Format;
+import com.seitov.vinylapi.entity.Genre;
 import com.seitov.vinylapi.projection.*;
 import ma.glasnost.orika.MapperFacade;
 import org.junit.jupiter.api.Test;
@@ -28,13 +30,11 @@ public class OrikaTest {
         //given
         VinylDetails vinylDetails = factory.createProjection(VinylDetails.class);
         ArtistName artistName = factory.createProjection(ArtistName.class);
-        FormatName formatName = factory.createProjection(FormatName.class);
-        GenreName genreName = factory.createProjection(GenreName.class);
         PhotoId photoId = factory.createProjection(PhotoId.class);
         SoundtrackName trackName = factory.createProjection(SoundtrackName.class);
+        Format format = new Format(1L, "2LP");
+        Genre genre = new Genre(1L, "Pop-Rock");
         artistName.setName("MichaelJ");
-        formatName.setName("2LP");
-        genreName.setName("Pop");
         trackName.setName("Billy jeans");
         photoId.setId(1L);
         vinylDetails.setId(0L);
@@ -42,8 +42,8 @@ public class OrikaTest {
         vinylDetails.setDescription("Legendary album of legendary artist");
         vinylDetails.setPrice(20.99);
         vinylDetails.setArtists(List.of(artistName));
-        vinylDetails.setGenres(List.of(genreName));
-        vinylDetails.setFormat(formatName);
+        vinylDetails.setGenres(List.of(genre));
+        vinylDetails.setFormat(format);
         vinylDetails.setInStock(true);
         vinylDetails.setRecordLabel("EMI");
         vinylDetails.setTrackList(List.of(trackName));
@@ -54,9 +54,9 @@ public class OrikaTest {
         vinylDto.setName("Moonwalk");
         vinylDto.setDescription("Legendary album of legendary artist");
         vinylDto.setPrice(20.99);
-        vinylDto.setArtists(List.of("MichaelJ"));
-        vinylDto.setGenres(List.of("Pop"));
-        vinylDto.setFormat("2LP");
+        vinylDto.setArtists(List.of(artistName));
+        vinylDto.setGenres(List.of(genre));
+        vinylDto.setFormat(format);
         vinylDto.setInStock(true);
         vinylDto.setRecordLabel("EMI");
         vinylDto.setTrackList(List.of("Billy jeans"));
@@ -69,16 +69,15 @@ public class OrikaTest {
     public void testVinylLightToVinylLightDto() {
         //given
         VinylLight vinylLight = factory.createProjection(VinylLight.class);
-        FormatName formatName = factory.createProjection(FormatName.class);
         ArtistName artistName = factory.createProjection(ArtistName.class);
         PhotoId photoId = factory.createProjection(PhotoId.class);
-        formatName.setName("2LP");
+        Format format = new Format(1L, "2LP");
         artistName.setName("MichaelJ");
         photoId.setId(1L);
         vinylLight.setId(0L);
         vinylLight.setName("Moonwalk");
         vinylLight.setPrice(20.99);
-        vinylLight.setFormat(formatName);
+        vinylLight.setFormat(format);
         vinylLight.setArtists(List.of(artistName));
         vinylLight.setPhotoLowRes(photoId);
 
@@ -86,8 +85,8 @@ public class OrikaTest {
         vinylLightDto.setId(0L);
         vinylLightDto.setName("Moonwalk");
         vinylLightDto.setPrice(20.99);
-        vinylLightDto.setFormat("2LP");
-        vinylLightDto.setArtist(List.of("MichaelJ"));
+        vinylLightDto.setFormat(format);
+        vinylLightDto.setArtists(List.of(artistName));
         vinylLightDto.setPhotoId(1L);
         //then
         assertEquals(vinylLightDto, orikaMapper.map(vinylLight, VinylLightDto.class));
