@@ -1,6 +1,8 @@
 package com.seitov.vinylapi.controller;
 
 import com.seitov.vinylapi.dto.ResponseMessage;
+import com.seitov.vinylapi.exception.RedundantPropertyException;
+import com.seitov.vinylapi.exception.ResourceAlreadyExistsException;
 import com.seitov.vinylapi.exception.ResourceNotFoundException;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,20 @@ public class ExceptionHandlingControllerAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseMessage missingParameter(MissingServletRequestParameterException ex) {
         return new ResponseMessage(400, "MISSING_PARAMETER", ex.getMessage());
+    }
+
+    @Hidden
+    @ExceptionHandler(value = {RedundantPropertyException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseMessage redundantProperty(RedundantPropertyException ex) {
+        return new ResponseMessage(400, "REDUNDANT_PROPERTY", ex.getMessage());
+    }
+
+    @Hidden
+    @ExceptionHandler(value = {ResourceAlreadyExistsException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseMessage resourceDuplication(ResourceAlreadyExistsException ex) {
+        return new ResponseMessage(400, "RESOURCE_DUPLICATION", ex.getMessage());
     }
 
 }
