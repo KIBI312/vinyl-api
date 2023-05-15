@@ -1,6 +1,7 @@
 package com.seitov.vinylapi.controller;
 
 import com.seitov.vinylapi.dto.ResponseMessage;
+import com.seitov.vinylapi.exception.DataConstraintViolationException;
 import com.seitov.vinylapi.exception.RedundantPropertyException;
 import com.seitov.vinylapi.exception.ResourceAlreadyExistsException;
 import com.seitov.vinylapi.exception.ResourceNotFoundException;
@@ -40,6 +41,13 @@ public class ExceptionHandlingControllerAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseMessage resourceDuplication(ResourceAlreadyExistsException ex) {
         return new ResponseMessage(400, "RESOURCE_DUPLICATION", ex.getMessage());
+    }
+
+    @Hidden
+    @ExceptionHandler(value = {DataConstraintViolationException.class})
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ResponseMessage dataConstrainViolation(DataConstraintViolationException ex) {
+        return new ResponseMessage(409, "DATA_CONSTRAINT_VIOLATION", ex.getMessage());
     }
 
 }
