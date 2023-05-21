@@ -2,17 +2,24 @@ package com.seitov.vinylapi.service;
 
 import com.seitov.vinylapi.dto.ResourceId;
 import com.seitov.vinylapi.entity.Genre;
+import com.seitov.vinylapi.entity.Image;
 import com.seitov.vinylapi.exception.DataConstraintViolationException;
 import com.seitov.vinylapi.exception.RedundantPropertyException;
 import com.seitov.vinylapi.exception.ResourceAlreadyExistsException;
 import com.seitov.vinylapi.exception.ResourceNotFoundException;
 import com.seitov.vinylapi.repository.GenreRepository;
+import com.seitov.vinylapi.repository.ImageRepository;
 import com.seitov.vinylapi.repository.VinylRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -23,7 +30,9 @@ public class ManagementServiceTest {
     @Mock
     private GenreRepository genreRepository;
     @Mock
-    VinylRepository vinylRepository;
+    private ImageRepository imageRepository;
+    @Mock
+    private VinylRepository vinylRepository;
 
     @InjectMocks
     private ManagementService managementService;
@@ -95,5 +104,36 @@ public class ManagementServiceTest {
         //then
         assertDoesNotThrow(() -> managementService.deleteGenre(genreId));
     }
+
+    @Test
+    public void photoCreationTest() {
+        //given
+        byte[] content = new byte[100];
+        new Random().nextBytes(content);
+        MultipartFile file = new MockMultipartFile("photo", content);
+        Image image = new Image();
+        image.setContent(content);
+        //when
+        when(imageRepository.save(image)).thenReturn(new Image(1L, content));
+        //then
+        assertEquals(new ResourceId(1L), managementService.createPhoto(file));
+    }
+
+    @Test
+    public void photoCreationTestError() {
+        //given
+        byte[] content = new byte[100];
+        new Random().nextBytes(content);
+        MultipartFile file = new MockMultipartFile("photo", content) {
+            @Override
+            public byte[] getBytes() throws IOException {
+                throw new IOException();
+            }
+        };
+        //then
+        Exception ex = assertThrows(RuntimeException.class, () -> managementService.createPhoto(file));
+        assertEquals("Error occurred during image processing", ex.getMessage());
+    }
+
 
 }

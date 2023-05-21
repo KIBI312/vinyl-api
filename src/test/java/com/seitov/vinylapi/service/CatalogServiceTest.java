@@ -4,8 +4,10 @@ import com.seitov.vinylapi.dto.VinylDto;
 import com.seitov.vinylapi.dto.VinylLightDto;
 import com.seitov.vinylapi.entity.Format;
 import com.seitov.vinylapi.entity.Genre;
+import com.seitov.vinylapi.entity.Image;
 import com.seitov.vinylapi.exception.ResourceNotFoundException;
 import com.seitov.vinylapi.projection.*;
+import com.seitov.vinylapi.repository.ImageRepository;
 import com.seitov.vinylapi.repository.VinylRepository;
 import ma.glasnost.orika.MapperFacade;
 import org.junit.jupiter.api.Test;
@@ -21,6 +23,7 @@ import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -31,6 +34,8 @@ public class CatalogServiceTest {
 
     @Mock
     private VinylRepository vinylRepository;
+    @Mock
+    private ImageRepository imageRepository;
     @Mock
     private MapperFacade orikaMapper;
 
@@ -115,6 +120,25 @@ public class CatalogServiceTest {
         assertEquals(vinylLightDtos, catalogService.getVinylsLight(0));
     }
 
+    @Test
+    public void photoRetrieval() {
+        //given
+        byte[] content = new byte[100];
+        new Random().nextBytes(content);
+        Image image = new Image(1L, content);
+        //when
+        when(imageRepository.findById(1L)).thenReturn(Optional.of(image));
+        //then
+        assertEquals(content, catalogService.getPhoto(1L));
+    }
 
+    @Test
+    public void nonExistingPhotoRetrieval() {
+        //when
+        when(imageRepository.findById(1L)).thenReturn(Optional.ofNullable(null));
+        //then
+        Exception ex = assertThrows(ResourceNotFoundException.class, () -> catalogService.getPhoto(1L));
+        assertEquals("Photo with this id doesn't exist", ex.getMessage());
+    }
 
 }

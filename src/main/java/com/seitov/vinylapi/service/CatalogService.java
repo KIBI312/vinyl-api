@@ -5,14 +5,12 @@ import com.seitov.vinylapi.dto.VinylDto;
 import com.seitov.vinylapi.dto.VinylLightDto;
 import com.seitov.vinylapi.entity.Format;
 import com.seitov.vinylapi.entity.Genre;
+import com.seitov.vinylapi.entity.Image;
 import com.seitov.vinylapi.exception.ResourceNotFoundException;
 import com.seitov.vinylapi.projection.ArtistDetails;
 import com.seitov.vinylapi.projection.VinylDetails;
 import com.seitov.vinylapi.projection.VinylLight;
-import com.seitov.vinylapi.repository.ArtistRepository;
-import com.seitov.vinylapi.repository.FormatRepository;
-import com.seitov.vinylapi.repository.GenreRepository;
-import com.seitov.vinylapi.repository.VinylRepository;
+import com.seitov.vinylapi.repository.*;
 import ma.glasnost.orika.MapperFacade;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,16 +26,18 @@ public class CatalogService {
     private final FormatRepository formatRepository;
     private final GenreRepository genreRepository;
     private final ArtistRepository artistRepository;
+    private final ImageRepository imageRepository;
     private final MapperFacade orikaMapper;
 
     public CatalogService(VinylRepository vinylRepository, FormatRepository formatRepository,
                           GenreRepository genreRepository, ArtistRepository artistRepository,
-                          MapperFacade orikaMapper) {
+                          MapperFacade orikaMapper, ImageRepository imageRepository) {
         this.vinylRepository = vinylRepository;
         this.formatRepository = formatRepository;
         this.artistRepository = artistRepository;
         this.genreRepository = genreRepository;
         this.orikaMapper = orikaMapper;
+        this.imageRepository = imageRepository;
     }
 
     public List<VinylLightDto> getVinylsLight(Integer page) {
@@ -79,7 +79,12 @@ public class CatalogService {
         return genreRepository.findAll();
     }
 
-
-
+    public byte[] getPhoto(Long id) {
+        Optional<Image> image = imageRepository.findById(id);
+        if(image.isEmpty()) {
+            throw new ResourceNotFoundException("Photo with this id doesn't exist");
+        }
+        return image.get().getContent();
+    }
 
 }
