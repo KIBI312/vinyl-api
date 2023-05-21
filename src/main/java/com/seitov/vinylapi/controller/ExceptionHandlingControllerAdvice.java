@@ -50,4 +50,11 @@ public class ExceptionHandlingControllerAdvice {
         return new ResponseMessage(409, "DATA_CONSTRAINT_VIOLATION", ex.getMessage());
     }
 
+    @Hidden
+    @ExceptionHandler(value = {RuntimeException.class})
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseMessage serverError(RuntimeException ex) {
+        return new ResponseMessage(500, "SERVER_ERROR", ex.getMessage());
+    }
+
 }

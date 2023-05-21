@@ -14,13 +14,15 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.Random;
 
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -142,6 +144,34 @@ public class ManagementControllerTest {
                 .andExpect(jsonPath("$.message", is("Cannot delete while there's vinyls dependent from this genre!")));
     }
 
+    @Test
+    public void photoUpload() throws Exception {
+        //given
+        byte[] content = new byte[100];
+        new Random().nextBytes(content);
+        MockMultipartFile file = new MockMultipartFile("photo", content);
+        //when
+        when(managementService.createPhoto(file)).thenReturn(new ResourceId(1L));
+        //then
+        mockMvc.perform(multipart("/management/photo").file(file))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)));
+    }
 
+    @Test
+    public void uploadCorruptedPhoto() throws Exception {
+        //given
+        byte[] content = new byte[100];
+        new Random().nextBytes(content);
+        MockMultipartFile file = new MockMultipartFile("photo", content);
+        //when
+        when(managementService.createPhoto(file)).thenThrow(new RuntimeException("Error occurred during image processing"));
+        //then
+        mockMvc.perform(multipart("/management/photo").file(file))
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.code", is(500)))
+                .andExpect(jsonPath("$.type", is("SERVER_ERROR")))
+                .andExpect(jsonPath("$.message", is("Error occurred during image processing")));
+    }
 
 }

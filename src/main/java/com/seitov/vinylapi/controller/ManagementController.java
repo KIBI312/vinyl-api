@@ -5,13 +5,13 @@ import com.seitov.vinylapi.dto.ResponseMessage;
 import com.seitov.vinylapi.entity.Genre;
 import com.seitov.vinylapi.service.ManagementService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/management")
@@ -27,7 +27,7 @@ public class ManagementController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", content =
             @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    array = @ArraySchema(schema = @Schema(implementation = ResourceId.class)))),
+                    schema = @Schema(implementation = ResourceId.class))),
             @ApiResponse(responseCode = "400", description = "Invalid request body",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ResponseMessage.class)))})
@@ -40,7 +40,7 @@ public class ManagementController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", content =
             @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    array = @ArraySchema(schema = @Schema(implementation = ResponseMessage.class)))),
+                    schema = @Schema(implementation = ResponseMessage.class))),
             @ApiResponse(responseCode = "404", description = "Trying to delete non-existing genre",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ResponseMessage.class))),
@@ -54,7 +54,17 @@ public class ManagementController {
                 "Genre with id " + genreId.getId() + " was deleted!");
     }
 
-
-
+    @Operation(description = "Uploads photo", tags = "management")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", content =
+            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = ResourceId.class))),
+            @ApiResponse(responseCode = "500", description = "Error during processing",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ResponseMessage.class)))})
+    @PostMapping(value = "/photo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResourceId uploadPhoto(@RequestParam("photo") MultipartFile imageContent) {
+       return managementService.createPhoto(imageContent);
+    }
 
 }
