@@ -1,5 +1,6 @@
 package com.seitov.vinylapi.controller;
 
+import com.seitov.vinylapi.dto.ArtistDto;
 import com.seitov.vinylapi.dto.ResourceId;
 import com.seitov.vinylapi.dto.ResponseMessage;
 import com.seitov.vinylapi.entity.Genre;
@@ -12,6 +13,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/management")
@@ -65,6 +68,11 @@ public class ManagementController {
     @PostMapping(value = "/photo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResourceId uploadPhoto(@RequestParam("photo") MultipartFile imageContent) {
        return managementService.createPhoto(imageContent);
+    }
+
+    @PostMapping(value = "/artists")
+    public ResourceId createArtist(@Valid @RequestBody ArtistDto artistDto) {
+        return managementService.createArtist(artistDto);
     }
 
 }

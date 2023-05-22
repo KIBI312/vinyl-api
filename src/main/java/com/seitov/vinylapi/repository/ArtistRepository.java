@@ -10,6 +10,7 @@ import java.util.List;
 @Repository
 public interface ArtistRepository extends JpaRepository<Artist, Long> {
 
+    boolean existsByName(String name);
     <T> List<T> findAllProjectedBy(Pageable pageable, Class<T> type);
 
 }

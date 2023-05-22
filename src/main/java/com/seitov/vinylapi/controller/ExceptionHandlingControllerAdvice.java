@@ -7,6 +7,7 @@ import com.seitov.vinylapi.exception.ResourceAlreadyExistsException;
 import com.seitov.vinylapi.exception.ResourceNotFoundException;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -55,6 +56,12 @@ public class ExceptionHandlingControllerAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseMessage serverError(RuntimeException ex) {
         return new ResponseMessage(500, "SERVER_ERROR", ex.getMessage());
+    }
+
+    @ExceptionHandler(value = {MethodArgumentNotValidException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseMessage resourceInvalidFromat(MethodArgumentNotValidException ex) {
+        return new ResponseMessage(400, "INVALID_PROPERTY", ex.getAllErrors().get(0).getDefaultMessage());
     }
 
 }
