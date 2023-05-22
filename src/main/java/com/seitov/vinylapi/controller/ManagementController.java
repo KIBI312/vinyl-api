@@ -70,6 +70,18 @@ public class ManagementController {
        return managementService.createPhoto(imageContent);
     }
 
+    @Operation(description = "Creates new Artist resource", tags = "management")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", content =
+            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = ResourceId.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid request body",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ResponseMessage.class))),
+            @ApiResponse(responseCode = "409", description = "Trying to save with non-existing photo",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ResponseMessage.class)))
+    })
     @PostMapping(value = "/artists")
     public ResourceId createArtist(@Valid @RequestBody ArtistDto artistDto) {
         return managementService.createArtist(artistDto);
