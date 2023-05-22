@@ -8,7 +8,6 @@ import com.seitov.vinylapi.exception.RedundantPropertyException;
 import com.seitov.vinylapi.exception.ResourceAlreadyExistsException;
 import com.seitov.vinylapi.exception.ResourceNotFoundException;
 import com.seitov.vinylapi.service.ManagementService;
-import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -216,7 +215,7 @@ public class ManagementControllerTest {
     public void createArtistWithTooLongDescription() throws Exception {
         //given
         JSONObject jsonObject = new JSONObject();
-        String description = StringUtils.repeat("A", 1001);
+        String description = "A".repeat(1001);
         jsonObject.put("name", "Jake");
         jsonObject.put("description", description);
         jsonObject.put("photoId", 1);
