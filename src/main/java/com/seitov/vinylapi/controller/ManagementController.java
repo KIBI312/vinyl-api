@@ -51,7 +51,7 @@ public class ManagementController {
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ResponseMessage.class)))})
     @DeleteMapping("/genres")
-    public ResponseMessage deleteGenre(@RequestBody ResourceId genreId) {
+    public ResponseMessage deleteGenre(@Valid @RequestBody ResourceId genreId) {
         managementService.deleteGenre(genreId);
         return new ResponseMessage(200, "SUCCESSFUL_DELETION",
                 "Genre with id " + genreId.getId() + " was deleted!");
@@ -86,5 +86,24 @@ public class ManagementController {
     public ResourceId createArtist(@Valid @RequestBody ArtistDto artistDto) {
         return managementService.createArtist(artistDto);
     }
+
+    @Operation(description = "Deletes artist by id", tags = "management")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", content =
+            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = ResponseMessage.class))),
+            @ApiResponse(responseCode = "404", description = "Trying to delete non-existing artist",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ResponseMessage.class))),
+            @ApiResponse(responseCode = "409", description = "Trying to delete artist with dependent vinyls",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ResponseMessage.class)))})
+    @DeleteMapping(value = "/artists")
+    public ResponseMessage deleteArtist(@Valid @RequestBody ResourceId resourceId) {
+        managementService.deleteArtist(resourceId);
+        return new ResponseMessage(200, "SUCCESSFUL_DELETION",
+                "Artists with id " + resourceId.getId() + " was deleted!");
+    }
+
 
 }

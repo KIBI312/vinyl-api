@@ -17,5 +17,6 @@ public interface VinylRepository extends JpaRepository<Vinyl, Long> {
     <T> List<T> readByGenres_Id(Long id, Class<T> type);
     <T> Optional<T> readById(Long id, Class<T> type);
     boolean existsByGenres_Id(Long id);
+    boolean existsByArtists_Id(Long id);
 
 }

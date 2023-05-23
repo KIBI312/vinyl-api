@@ -88,4 +88,14 @@ public class ManagementService {
         return new ResourceId(id);
     }
 
+    public void deleteArtist(ResourceId resourceId) {
+        if(!artistRepository.existsById(resourceId.getId())) {
+            throw new ResourceNotFoundException("Artist with this id doesn't exist");
+        }
+        if(vinylRepository.existsByArtists_Id(resourceId.getId())) {
+            throw new DataConstraintViolationException("Cannot delete while there's vinyls dependent from this artist!");
+        }
+        artistRepository.deleteById(resourceId.getId());
+    }
+
 }
