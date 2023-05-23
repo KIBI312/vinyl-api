@@ -2,7 +2,6 @@ package com.seitov.vinylapi.controller;
 
 import com.seitov.vinylapi.dto.ArtistDto;
 import com.seitov.vinylapi.dto.ResponseMessage;
-import com.seitov.vinylapi.dto.VinylDto;
 import com.seitov.vinylapi.dto.VinylLightDto;
 import com.seitov.vinylapi.entity.Format;
 import com.seitov.vinylapi.entity.Genre;
@@ -28,31 +27,6 @@ public class CatalogController {
 
     public CatalogController(CatalogService catalogService) {
         this.catalogService = catalogService;
-    }
-
-    @Operation(description = "Get array of vinyls",tags = "catalog")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", content =
-                    @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            array = @ArraySchema(schema = @Schema(implementation = VinylLightDto.class)))),
-            @ApiResponse(responseCode = "400", description = "Missing required 'page' parameter",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = ResponseMessage.class)))})
-    @GetMapping("/vinyls")
-    public List<VinylLightDto> getVinyls(@RequestParam Integer page) {
-        return catalogService.getVinylsLight(page);
-    }
-
-    @Operation(description = "Get detailed vinyl object", tags = "catalog")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = VinylDto.class))),
-            @ApiResponse(responseCode = "404", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = ResponseMessage.class)))
-    })
-    @GetMapping("/vinyls/{id}")
-    public VinylDto getVinyl(@PathVariable Long id) {
-        return catalogService.getVinylById(id);
     }
 
     @Operation(description = "Get array of vinyls filtered by Artist", tags = "catalog")
