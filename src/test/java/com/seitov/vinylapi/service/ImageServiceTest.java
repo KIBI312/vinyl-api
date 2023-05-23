@@ -3,8 +3,6 @@ package com.seitov.vinylapi.service;
 import com.seitov.vinylapi.entity.Image;
 import com.seitov.vinylapi.exception.ResourceNotFoundException;
 import com.seitov.vinylapi.repository.ImageRepository;
-import com.seitov.vinylapi.repository.VinylRepository;
-import ma.glasnost.orika.MapperFacade;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,17 +17,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class CatalogServiceTest {
+public class ImageServiceTest {
 
-    @Mock
-    private VinylRepository vinylRepository;
     @Mock
     private ImageRepository imageRepository;
-    @Mock
-    private MapperFacade orikaMapper;
 
     @InjectMocks
-    private CatalogService catalogService;
+    private ImageService imageService;
 
     @Test
     public void photoRetrieval() {
@@ -40,7 +34,7 @@ public class CatalogServiceTest {
         //when
         when(imageRepository.findById(1L)).thenReturn(Optional.of(image));
         //then
-        assertEquals(content, catalogService.getPhoto(1L));
+        assertEquals(content, imageService.getPhoto(1L));
     }
 
     @Test
@@ -48,7 +42,7 @@ public class CatalogServiceTest {
         //when
         when(imageRepository.findById(1L)).thenReturn(Optional.ofNullable(null));
         //then
-        Exception ex = assertThrows(ResourceNotFoundException.class, () -> catalogService.getPhoto(1L));
+        Exception ex = assertThrows(ResourceNotFoundException.class, () -> imageService.getPhoto(1L));
         assertEquals("Photo with this id doesn't exist", ex.getMessage());
     }
 

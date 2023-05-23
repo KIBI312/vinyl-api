@@ -8,10 +8,11 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class CatalogService {
+public class ImageService {
+
     private final ImageRepository imageRepository;
 
-    public CatalogService(ImageRepository imageRepository) {
+    public ImageService(ImageRepository imageRepository) {
         this.imageRepository = imageRepository;
     }
 

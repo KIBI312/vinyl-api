@@ -1,7 +1,7 @@
 package com.seitov.vinylapi.controller;
 
 import com.seitov.vinylapi.dto.ResponseMessage;
-import com.seitov.vinylapi.service.CatalogService;
+import com.seitov.vinylapi.service.ImageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -16,26 +16,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/catalog")
-public class CatalogController {
+@RequestMapping("/photo")
+public class ImageController {
 
-    private final CatalogService catalogService;
+    private final ImageService imageService;
 
-    public CatalogController(CatalogService catalogService) {
-        this.catalogService = catalogService;
+    public ImageController(ImageService imageService) {
+        this.imageService = imageService;
     }
 
-    @Operation(description = "Get photo by id", tags = "catalog")
+    @Operation(description = "Get photo by id", tags = "photo")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     content = @Content(mediaType = MediaType.IMAGE_JPEG_VALUE)),
             @ApiResponse(responseCode = "404", description = "Photo with this id doesn't exist",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = ResponseMessage.class)))
+                            schema = @Schema(implementation = ResponseMessage.class)))
     })
-    @GetMapping(value = "/photo/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
+    @GetMapping(value = "/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
     private Resource getImage(@PathVariable Long id) {
-        byte[] image = catalogService.getPhoto(id);
+        byte[] image = imageService.getPhoto(id);
         return new ByteArrayResource(image);
     }
 
