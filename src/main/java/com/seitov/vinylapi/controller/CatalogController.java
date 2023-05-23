@@ -4,7 +4,6 @@ import com.seitov.vinylapi.dto.ArtistDto;
 import com.seitov.vinylapi.dto.ResponseMessage;
 import com.seitov.vinylapi.dto.VinylLightDto;
 import com.seitov.vinylapi.entity.Format;
-import com.seitov.vinylapi.entity.Genre;
 import com.seitov.vinylapi.service.CatalogService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -39,18 +38,6 @@ public class CatalogController {
         return catalogService.getVinylsLightByArtist(id);
     }
 
-
-    @Operation(description = "Get array of vinyls filtered by Genre", tags = "catalog")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", content =
-            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    array = @ArraySchema(schema = @Schema(implementation = VinylLightDto.class))))})
-    @GetMapping("/genres/{id}/vinyls")
-    public List<VinylLightDto> getVinylsByGenre(@PathVariable Long id) {
-        return catalogService.getVinylsLightByGenre(id);
-    }
-
-
     @Operation(description = "Get array of vinyls filtered by Format", tags = "catalog")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", content =
@@ -82,16 +69,6 @@ public class CatalogController {
     @GetMapping("/artists")
     public List<ArtistDto> getArtists(@RequestParam Integer page) {
         return catalogService.getArtists(page);
-    }
-
-    @Operation(description = "Get array of Genres", tags = "catalog")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", content =
-            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    array = @ArraySchema(schema = @Schema(implementation = Genre.class))))})
-    @GetMapping("/genres")
-    public List<Genre> getGenres() {
-        return catalogService.getGenres();
     }
 
     @Operation(description = "Get photo by id", tags = "catalog")

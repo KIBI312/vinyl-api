@@ -3,7 +3,6 @@ package com.seitov.vinylapi.service;
 import com.seitov.vinylapi.dto.ArtistDto;
 import com.seitov.vinylapi.dto.VinylLightDto;
 import com.seitov.vinylapi.entity.Format;
-import com.seitov.vinylapi.entity.Genre;
 import com.seitov.vinylapi.entity.Image;
 import com.seitov.vinylapi.exception.ResourceNotFoundException;
 import com.seitov.vinylapi.projection.ArtistDetails;
@@ -42,9 +41,7 @@ public class CatalogService {
         return orikaMapper.mapAsList(vinylRepository.readByArtists_Id(id, VinylLight.class), VinylLightDto.class);
     }
 
-    public List<VinylLightDto> getVinylsLightByGenre(Long id) {
-        return orikaMapper.mapAsList(vinylRepository.readByGenres_Id(id, VinylLight.class), VinylLightDto.class);
-    }
+
 
     public List<VinylLightDto> getVinylsLightByFormat(Long id) {
         return orikaMapper.mapAsList(vinylRepository.readByFormat_Id(id, VinylLight.class), VinylLightDto.class);
@@ -59,9 +56,7 @@ public class CatalogService {
         return orikaMapper.mapAsList(artistRepository.findAllProjectedBy(pageable, ArtistDetails.class), ArtistDto.class);
     }
 
-    public List<Genre> getGenres() {
-        return genreRepository.findAll();
-    }
+
 
     public byte[] getPhoto(Long id) {
         Optional<Image> image = imageRepository.findById(id);
