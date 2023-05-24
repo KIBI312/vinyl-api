@@ -4,10 +4,8 @@ import com.seitov.vinylapi.dto.VinylDto;
 import com.seitov.vinylapi.dto.VinylLightDto;
 import com.seitov.vinylapi.entity.Format;
 import com.seitov.vinylapi.entity.Genre;
-import com.seitov.vinylapi.entity.Image;
 import com.seitov.vinylapi.exception.ResourceNotFoundException;
 import com.seitov.vinylapi.projection.*;
-import com.seitov.vinylapi.repository.ImageRepository;
 import com.seitov.vinylapi.repository.VinylRepository;
 import ma.glasnost.orika.MapperFacade;
 import org.junit.jupiter.api.Test;
@@ -23,24 +21,21 @@ import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class CatalogServiceTest {
+public class VinylServiceTest {
 
     @Mock
     private VinylRepository vinylRepository;
     @Mock
-    private ImageRepository imageRepository;
-    @Mock
     private MapperFacade orikaMapper;
 
     @InjectMocks
-    private CatalogService catalogService;
+    private VinylService vinylService;
 
     private final ProjectionFactory factory = new SpelAwareProxyProjectionFactory();
 
@@ -84,7 +79,7 @@ public class CatalogServiceTest {
         when(vinylRepository.readById(0L, VinylDetails.class)).thenReturn(Optional.of(vinylDetails));
         when(orikaMapper.map(vinylDetails, VinylDto.class)).thenReturn(vinylDto);
         //then
-        assertEquals(vinylDto, catalogService.getVinylById(0L));
+        assertEquals(vinylDto, vinylService.getVinylById(0L));
     }
 
     @Test
@@ -92,7 +87,7 @@ public class CatalogServiceTest {
         //when
         when(vinylRepository.readById(0L, VinylDetails.class)).thenReturn(Optional.ofNullable(null));
         //then
-        Exception ex = assertThrows(ResourceNotFoundException.class, () -> catalogService.getVinylById(0L));
+        Exception ex = assertThrows(ResourceNotFoundException.class, () -> vinylService.getVinylById(0L));
         assertEquals("Vinyl with this id doesn't exist", ex.getMessage());
     }
 
@@ -116,29 +111,8 @@ public class CatalogServiceTest {
         when(vinylRepository.findAllProjectedBy(pageable, VinylLight.class)).thenReturn(vinylLights);
         when(orikaMapper.mapAsList(vinylLights, VinylLightDto.class)).thenReturn(vinylLightDtos);
         //then
-        assertEquals(3, catalogService.getVinylsLight(0).size());
-        assertEquals(vinylLightDtos, catalogService.getVinylsLight(0));
-    }
-
-    @Test
-    public void photoRetrieval() {
-        //given
-        byte[] content = new byte[100];
-        new Random().nextBytes(content);
-        Image image = new Image(1L, content);
-        //when
-        when(imageRepository.findById(1L)).thenReturn(Optional.of(image));
-        //then
-        assertEquals(content, catalogService.getPhoto(1L));
-    }
-
-    @Test
-    public void nonExistingPhotoRetrieval() {
-        //when
-        when(imageRepository.findById(1L)).thenReturn(Optional.ofNullable(null));
-        //then
-        Exception ex = assertThrows(ResourceNotFoundException.class, () -> catalogService.getPhoto(1L));
-        assertEquals("Photo with this id doesn't exist", ex.getMessage());
+        assertEquals(3, vinylService.getVinylsLight(0).size());
+        assertEquals(vinylLightDtos, vinylService.getVinylsLight(0));
     }
 
 }

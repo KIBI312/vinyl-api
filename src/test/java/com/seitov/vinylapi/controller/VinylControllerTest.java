@@ -6,7 +6,7 @@ import com.seitov.vinylapi.entity.Format;
 import com.seitov.vinylapi.entity.Genre;
 import com.seitov.vinylapi.exception.ResourceNotFoundException;
 import com.seitov.vinylapi.projection.ArtistName;
-import com.seitov.vinylapi.service.CatalogService;
+import com.seitov.vinylapi.service.VinylService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -28,13 +28,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class CatalogControllerTest {
+public class VinylControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    CatalogService catalogService;
+    private VinylService vinylService;
 
     private final ProjectionFactory factory = new SpelAwareProxyProjectionFactory();
 
@@ -49,9 +49,9 @@ public class CatalogControllerTest {
             vinylLightDtos.add(vinylLightDto);
         }
         //when
-        when(catalogService.getVinylsLight(0)).thenReturn(vinylLightDtos);
+        when(vinylService.getVinylsLight(0)).thenReturn(vinylLightDtos);
         //then
-        mockMvc.perform(get("/catalog/vinyls?page=0"))
+        mockMvc.perform(get("/vinyls?page=0"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(3)))
                 .andExpect(jsonPath("[0].id", is(vinylLightDtos.get(0).getId()), Long.class))
@@ -61,9 +61,9 @@ public class CatalogControllerTest {
     @Test
     public void getVinylNonExisting() throws Exception {
         //when
-        when(catalogService.getVinylById(1L)).thenThrow(new ResourceNotFoundException("Vinyl with this id doesn't exist"));
+        when(vinylService.getVinylById(1L)).thenThrow(new ResourceNotFoundException("Vinyl with this id doesn't exist"));
         //then
-        mockMvc.perform(get("/catalog/vinyls/1"))
+        mockMvc.perform(get("/vinyls/1"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.code", is(404)))
                 .andExpect(jsonPath("$.type", is("NOT_EXIST")))
@@ -91,9 +91,9 @@ public class CatalogControllerTest {
         vinylDto.setTrackList(List.of("Billy jeans", "Smooth criminal"));
         vinylDto.setPhotoId(1L);
         //when
-        when(catalogService.getVinylById(0L)).thenReturn(vinylDto);
+        when(vinylService.getVinylById(0L)).thenReturn(vinylDto);
         //then
-        mockMvc.perform(get("/catalog/vinyls/0"))
+        mockMvc.perform(get("/vinyls/0"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(0)))
                 .andExpect(jsonPath("$.name", is("Moonwalk")))
