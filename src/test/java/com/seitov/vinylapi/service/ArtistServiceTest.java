@@ -8,9 +8,7 @@ import com.seitov.vinylapi.exception.DataConstraintViolationException;
 import com.seitov.vinylapi.exception.RedundantPropertyException;
 import com.seitov.vinylapi.exception.ResourceAlreadyExistsException;
 import com.seitov.vinylapi.repository.ArtistRepository;
-import com.seitov.vinylapi.repository.GenreRepository;
 import com.seitov.vinylapi.repository.ImageRepository;
-import com.seitov.vinylapi.repository.VinylRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,19 +20,15 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class ManagementServiceTest {
+public class ArtistServiceTest {
 
-    @Mock
-    private GenreRepository genreRepository;
-    @Mock
-    private ImageRepository imageRepository;
     @Mock
     private ArtistRepository artistRepository;
     @Mock
-    private VinylRepository vinylRepository;
+    private ImageRepository imageRepository;
 
     @InjectMocks
-    private ManagementService managementService;
+    private ArtistService artistService;
 
     @Test
     public void artistCreation() {
@@ -51,7 +45,7 @@ public class ManagementServiceTest {
         when(imageRepository.getReferenceById(1L)).thenReturn(image);
         when(artistRepository.save(toCreate)).thenReturn(created);
         //then
-        assertEquals(createdId, managementService.createArtist(artistDto));
+        assertEquals(createdId, artistService.createArtist(artistDto));
     }
 
     @Test
@@ -60,7 +54,7 @@ public class ManagementServiceTest {
         ArtistDto artistDto = new ArtistDto(0L, "Jake", "SomeArtist", 1L);
         //then
         Exception ex = assertThrows(RedundantPropertyException.class,
-                () -> managementService.createArtist(artistDto));
+                () -> artistService.createArtist(artistDto));
         assertEquals("Id not allowed in POST requests", ex.getMessage());
     }
 
@@ -72,7 +66,7 @@ public class ManagementServiceTest {
         when(imageRepository.existsById(1L)).thenReturn(false);
         //then
         Exception ex = assertThrows(DataConstraintViolationException.class,
-                () -> managementService.createArtist(artistDto));
+                () -> artistService.createArtist(artistDto));
         assertEquals("Photo with provided id doesn't exist", ex.getMessage());
     }
 
@@ -85,7 +79,7 @@ public class ManagementServiceTest {
         when(artistRepository.existsByName("Jake")).thenReturn(true);
         //then
         Exception ex = assertThrows(ResourceAlreadyExistsException.class,
-                () -> managementService.createArtist(artistDto));
+                () -> artistService.createArtist(artistDto));
         assertEquals("Artist with this name already exists", ex.getMessage());
     }
 

@@ -1,6 +1,7 @@
 package com.seitov.vinylapi.controller;
 
 import com.seitov.vinylapi.dto.ArtistDto;
+import com.seitov.vinylapi.dto.ResourceId;
 import com.seitov.vinylapi.dto.ResponseMessage;
 import com.seitov.vinylapi.dto.VinylLightDto;
 import com.seitov.vinylapi.service.ArtistService;
@@ -13,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -46,6 +48,41 @@ public class ArtistController {
     @GetMapping("/{id}/vinyls")
     public List<VinylLightDto> getVinylsByArtist(@PathVariable Long id) {
         return artistService.getVinylsLightByArtist(id);
+    }
+
+    @Operation(description = "Creates new Artist resource", tags = "artist")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", content =
+            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = ResourceId.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid request body",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ResponseMessage.class))),
+            @ApiResponse(responseCode = "409", description = "Trying to save with non-existing photo",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ResponseMessage.class)))
+    })
+    @PostMapping
+    public ResourceId createArtist(@Valid @RequestBody ArtistDto artistDto) {
+        return artistService.createArtist(artistDto);
+    }
+
+    @Operation(description = "Deletes artist by id", tags = "artist")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", content =
+            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = ResponseMessage.class))),
+            @ApiResponse(responseCode = "404", description = "Trying to delete non-existing artist",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ResponseMessage.class))),
+            @ApiResponse(responseCode = "409", description = "Trying to delete artist with dependent vinyls",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ResponseMessage.class)))})
+    @DeleteMapping
+    public ResponseMessage deleteArtist(@Valid @RequestBody ResourceId resourceId) {
+        artistService.deleteArtist(resourceId);
+        return new ResponseMessage(200, "SUCCESSFUL_DELETION",
+                "Artists with id " + resourceId.getId() + " was deleted!");
     }
 
 }

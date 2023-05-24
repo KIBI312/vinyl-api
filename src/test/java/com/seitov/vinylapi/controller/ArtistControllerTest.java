@@ -2,7 +2,7 @@ package com.seitov.vinylapi.controller;
 
 import com.seitov.vinylapi.dto.ArtistDto;
 import com.seitov.vinylapi.dto.ResourceId;
-import com.seitov.vinylapi.service.ManagementService;
+import com.seitov.vinylapi.service.ArtistService;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +20,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ManagementControllerTest {
+public class ArtistControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private ManagementService managementService;
+    private ArtistService artistService;
 
     @Test
     public void createArtist() throws Exception {
@@ -38,11 +38,11 @@ public class ManagementControllerTest {
         ArtistDto artistDto = new ArtistDto(null, "Jake", "SomeArtist", 1L);
         ResourceId result = new ResourceId(0L);
         //when
-        when(managementService.createArtist(artistDto)).thenReturn(result);
+        when(artistService.createArtist(artistDto)).thenReturn(result);
         //then
-        mockMvc.perform(post("/management/artists")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonObject.toString()))
+        mockMvc.perform(post("/artists")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonObject.toString()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(0)));
     }
@@ -55,7 +55,7 @@ public class ManagementControllerTest {
         jsonObject.put("description", "SomeArtist");
         jsonObject.put("photoId", 1);
         //when
-        mockMvc.perform(post("/management/artists")
+        mockMvc.perform(post("/artists")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonObject.toString()))
                 .andExpect(status().isBadRequest())
@@ -73,7 +73,7 @@ public class ManagementControllerTest {
         jsonObject.put("description", description);
         jsonObject.put("photoId", 1);
         //when
-        mockMvc.perform(post("/management/artists")
+        mockMvc.perform(post("/artists")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonObject.toString()))
                 .andExpect(status().isBadRequest())
