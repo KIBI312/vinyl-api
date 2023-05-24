@@ -78,11 +78,11 @@ public class ArtistController {
             @ApiResponse(responseCode = "409", description = "Trying to delete artist with dependent vinyls",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ResponseMessage.class)))})
-    @DeleteMapping
-    public ResponseMessage deleteArtist(@Valid @RequestBody ResourceId resourceId) {
-        artistService.deleteArtist(resourceId);
+    @DeleteMapping("/{id}")
+    public ResponseMessage deleteArtist(@PathVariable Long id) {
+        artistService.deleteArtist(id);
         return new ResponseMessage(200, "SUCCESSFUL_DELETION",
-                "Artists with id " + resourceId.getId() + " was deleted!");
+                "Artists with id " + id + " was deleted!");
     }
 
 }

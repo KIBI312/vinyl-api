@@ -63,14 +63,14 @@ public class ArtistService {
         return new ResourceId(id);
     }
 
-    public void deleteArtist(ResourceId resourceId) {
-        if(!artistRepository.existsById(resourceId.getId())) {
+    public void deleteArtist(Long id) {
+        if(!artistRepository.existsById(id)) {
             throw new ResourceNotFoundException("Artist with this id doesn't exist");
         }
-        if(vinylRepository.existsByArtists_Id(resourceId.getId())) {
+        if(vinylRepository.existsByArtists_Id(id)) {
             throw new DataConstraintViolationException("Cannot delete while there's vinyls dependent from this artist!");
         }
-        artistRepository.deleteById(resourceId.getId());
+        artistRepository.deleteById(id);
     }
 
 }
