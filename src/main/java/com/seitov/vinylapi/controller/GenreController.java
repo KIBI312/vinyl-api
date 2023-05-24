@@ -14,7 +14,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -71,11 +70,11 @@ public class GenreController {
             @ApiResponse(responseCode = "409", description = "Trying to delete genre with dependent vinyls",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ResponseMessage.class)))})
-    @DeleteMapping()
-    public ResponseMessage deleteGenre(@Valid @RequestBody ResourceId genreId) {
-        genreService.deleteGenre(genreId);
+    @DeleteMapping("/{id}")
+    public ResponseMessage deleteGenre(@PathVariable Long id) {
+        genreService.deleteGenre(id);
         return new ResponseMessage(200, "SUCCESSFUL_DELETION",
-                "Genre with id " + genreId.getId() + " was deleted!");
+                "Genre with id " + id + " was deleted!");
     }
 
 }

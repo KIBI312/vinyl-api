@@ -95,7 +95,7 @@ public class GenreControllerTest {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("id", 1);
         //then
-        mockMvc.perform(delete("/genres")
+        mockMvc.perform(delete("/genres/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonObject.toString()))
                 .andExpect(status().isOk())
@@ -109,12 +109,11 @@ public class GenreControllerTest {
         //given
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("id", 1);
-        ResourceId genreId = new ResourceId(1L);
         //when
         doThrow(new ResourceNotFoundException("Genre with this id doesn't exist"))
-                .when(genreService).deleteGenre(genreId);
+                .when(genreService).deleteGenre(1L);
         //then
-        mockMvc.perform(delete("/genres")
+        mockMvc.perform(delete("/genres/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonObject.toString()))
                 .andExpect(status().isNotFound())
@@ -128,12 +127,11 @@ public class GenreControllerTest {
         //given
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("id", 1);
-        ResourceId genreId = new ResourceId(1L);
         //when
         doThrow(new DataConstraintViolationException("Cannot delete while there's vinyls dependent from this genre!"))
-                .when(genreService).deleteGenre(genreId);
+                .when(genreService).deleteGenre(1L);
         //then
-        mockMvc.perform(delete("/genres")
+        mockMvc.perform(delete("/genres/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonObject.toString()))
                 .andExpect(status().isConflict())

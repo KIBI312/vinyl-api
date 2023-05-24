@@ -65,35 +65,35 @@ public class GenreServiceTest {
     @Test
     public void nonExistingGenreDeletionTest() {
         //given
-        ResourceId genreId = new ResourceId(1L);
+        Long id = 1L;
         //when
         when(genreRepository.existsById(1L)).thenReturn(false);
         //then
-        Exception ex = assertThrows(ResourceNotFoundException.class, () -> genreService.deleteGenre(genreId));
+        Exception ex = assertThrows(ResourceNotFoundException.class, () -> genreService.deleteGenre(id));
         assertEquals("Genre with this id doesn't exist", ex.getMessage());
     }
 
     @Test
     public void busyGenreDeletionTest() {
         //given
-        ResourceId genreId = new ResourceId(1L);
+        Long id = 1L;
         //when
         when(genreRepository.existsById(1L)).thenReturn(true);
         when(vinylRepository.existsByGenres_Id(1L)).thenReturn(true);
         //then
-        Exception ex = assertThrows(DataConstraintViolationException.class, () -> genreService.deleteGenre(genreId));
+        Exception ex = assertThrows(DataConstraintViolationException.class, () -> genreService.deleteGenre(id));
         assertEquals("Cannot delete while there's vinyls dependent from this genre!", ex.getMessage());
     }
 
     @Test
     public void genreDeletionTest() {
         //given
-        ResourceId genreId = new ResourceId(1L);
+        Long id = 1L;
         //when
         when(genreRepository.existsById(1L)).thenReturn(true);
         when(vinylRepository.existsByGenres_Id(1L)).thenReturn(false);
         //then
-        assertDoesNotThrow(() -> genreService.deleteGenre(genreId));
+        assertDoesNotThrow(() -> genreService.deleteGenre(id));
     }
 
 }

@@ -47,14 +47,14 @@ public class GenreService {
         return new ResourceId(id);
     }
 
-    public void deleteGenre(ResourceId genreId) {
-        if(!genreRepository.existsById(genreId.getId())) {
+    public void deleteGenre(Long id) {
+        if(!genreRepository.existsById(id)) {
             throw new ResourceNotFoundException("Genre with this id doesn't exist");
         }
-        if(vinylRepository.existsByGenres_Id(genreId.getId())) {
+        if(vinylRepository.existsByGenres_Id(id)) {
             throw new DataConstraintViolationException("Cannot delete while there's vinyls dependent from this genre!");
         }
-        genreRepository.deleteById(genreId.getId());
+        genreRepository.deleteById(id);
     }
 
 }
