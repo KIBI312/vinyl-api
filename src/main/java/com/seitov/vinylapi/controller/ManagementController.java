@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -55,19 +54,6 @@ public class ManagementController {
         managementService.deleteGenre(genreId);
         return new ResponseMessage(200, "SUCCESSFUL_DELETION",
                 "Genre with id " + genreId.getId() + " was deleted!");
-    }
-
-    @Operation(description = "Uploads photo", tags = "management")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", content =
-            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = ResourceId.class))),
-            @ApiResponse(responseCode = "500", description = "Error during processing",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = ResponseMessage.class)))})
-    @PostMapping(value = "/photo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResourceId uploadPhoto(@RequestParam("photo") MultipartFile imageContent) {
-       return managementService.createPhoto(imageContent);
     }
 
     @Operation(description = "Creates new Artist resource", tags = "management")
