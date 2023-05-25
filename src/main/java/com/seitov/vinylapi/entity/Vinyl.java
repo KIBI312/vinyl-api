@@ -12,6 +12,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "vinyl")
 public class Vinyl {
 
     @Id
@@ -34,9 +35,9 @@ public class Vinyl {
             joinColumns = @JoinColumn(name = "vinyl_id"),
             inverseJoinColumns = @JoinColumn(name = "soundtrack_id"))
     private List<Soundtrack> trackList;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Image photoLowRes;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Image photoHighRes;
 
 }

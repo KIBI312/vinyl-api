@@ -5,15 +5,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "artist")
 public class Artist {
 
     @Id
@@ -22,7 +20,7 @@ public class Artist {
     private String name;
     @Length(max = 1000)
     private String description;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private Image photo;
 
 }
