@@ -1,17 +1,19 @@
 package com.seitov.vinylapi.controller;
 
 import com.seitov.vinylapi.dto.VinylDto;
-import com.seitov.vinylapi.dto.VinylLightDto;
+import com.seitov.vinylapi.entity.ArtistShort;
 import com.seitov.vinylapi.entity.Format;
 import com.seitov.vinylapi.entity.Genre;
+import com.seitov.vinylapi.entity.VinylShort;
 import com.seitov.vinylapi.exception.ResourceNotFoundException;
-import com.seitov.vinylapi.projection.ArtistName;
 import com.seitov.vinylapi.service.VinylService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 import org.springframework.test.web.servlet.MockMvc;
@@ -41,21 +43,19 @@ public class VinylControllerTest {
     @Test
     public void getAllVinyls() throws Exception {
         //given
-        List<VinylLightDto> vinylLightDtos = new ArrayList<>();
-        for (int i = 0; i < 3; i++){
-            VinylLightDto vinylLightDto = new VinylLightDto();
-            vinylLightDto.setId((long) i);
-            vinylLightDto.setName("Vinyl #"+i);
-            vinylLightDtos.add(vinylLightDto);
+        List<VinylShort> vinylShorts = new ArrayList<>();
+        for (long i = 0; i < 3; i++){
+            vinylShorts.add(new VinylShort(i, "Vinyl #"+i,
+                    null, null, null, null));
         }
         //when
-        when(vinylService.getVinylsLight(0)).thenReturn(vinylLightDtos);
+        when(vinylService.getVinylsShort(0)).thenReturn(vinylShorts);
         //then
         mockMvc.perform(get("/vinyls?page=0"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(3)))
-                .andExpect(jsonPath("[0].id", is(vinylLightDtos.get(0).getId()), Long.class))
-                .andExpect(jsonPath("[0].name", is(vinylLightDtos.get(0).getName())));
+                .andExpect(jsonPath("[0].id", is(0)))
+                .andExpect(jsonPath("[0].name", is("Vinyl #0")));
     }
 
     @Test
@@ -73,9 +73,7 @@ public class VinylControllerTest {
     @Test
     public void  getVinyl() throws Exception {
         //given
-        ArtistName artistName = factory.createProjection(ArtistName.class);
-        artistName.setId(1L);
-        artistName.setName("MichaelJ");
+        ArtistShort artistShort = new ArtistShort(1L, "MichaelJ");
         Format format = new Format(1L, "2LP");
         Genre genre = new Genre(1L, "Pop");
         VinylDto vinylDto = new VinylDto();
@@ -83,7 +81,7 @@ public class VinylControllerTest {
         vinylDto.setName("Moonwalk");
         vinylDto.setDescription("Legendary album of legendary artist");
         vinylDto.setPrice(20.99);
-        vinylDto.setArtists(List.of(artistName));
+        vinylDto.setArtists(List.of(artistShort));
         vinylDto.setGenres(List.of(genre));
         vinylDto.setFormat(format);
         vinylDto.setInStock(true);
