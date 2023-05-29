@@ -2,7 +2,6 @@ package com.seitov.vinylapi.config;
 
 import com.seitov.vinylapi.dto.ArtistDto;
 import com.seitov.vinylapi.dto.VinylDto;
-import com.seitov.vinylapi.dto.VinylLightDto;
 import com.seitov.vinylapi.projection.*;
 import ma.glasnost.orika.CustomMapper;
 import ma.glasnost.orika.MapperFacade;
@@ -21,18 +20,6 @@ public class OrikaMapperConfig {
 
     @Bean
     public MapperFacade orikaMapper() {
-        mapperFactory.classMap(VinylLight.class, VinylLightDto.class)
-                .customize(new CustomMapper<VinylLight, VinylLightDto>() {
-                    @Override
-                    public void mapAtoB(VinylLight vinylLight, VinylLightDto vinylLightDto, MappingContext context) {
-                        vinylLightDto.setId(vinylLight.getId());
-                        vinylLightDto.setName(vinylLight.getName());
-                        vinylLightDto.setPrice(vinylLight.getPrice());
-                        vinylLightDto.setArtists(vinylLight.getArtists());
-                        vinylLightDto.setFormat(vinylLight.getFormat());
-                        vinylLightDto.setPhotoId(vinylLight.getPhotoLowRes().getId());
-                    }
-                }).register();
         mapperFactory.classMap(VinylDetails.class, VinylDto.class)
                 .customize(new CustomMapper<VinylDetails, VinylDto>() {
                     @Override
