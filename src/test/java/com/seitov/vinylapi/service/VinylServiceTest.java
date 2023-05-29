@@ -1,18 +1,22 @@
 package com.seitov.vinylapi.service;
 
 import com.seitov.vinylapi.dto.VinylDto;
-import com.seitov.vinylapi.dto.VinylLightDto;
+import com.seitov.vinylapi.entity.ArtistShort;
 import com.seitov.vinylapi.entity.Format;
 import com.seitov.vinylapi.entity.Genre;
+import com.seitov.vinylapi.entity.VinylShort;
 import com.seitov.vinylapi.exception.ResourceNotFoundException;
 import com.seitov.vinylapi.projection.*;
 import com.seitov.vinylapi.repository.VinylRepository;
+import com.seitov.vinylapi.repository.VinylShortRepository;
 import ma.glasnost.orika.MapperFacade;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.projection.ProjectionFactory;
@@ -32,6 +36,8 @@ public class VinylServiceTest {
     @Mock
     private VinylRepository vinylRepository;
     @Mock
+    VinylShortRepository vinylShortRepository;
+    @Mock
     private MapperFacade orikaMapper;
 
     @InjectMocks
@@ -43,19 +49,18 @@ public class VinylServiceTest {
     public void testGetVinylById() {
         //given
         VinylDetails vinylDetails = factory.createProjection(VinylDetails.class);
-        ArtistName artistName = factory.createProjection(ArtistName.class);
+        ArtistShort artistShort = new ArtistShort(1L, "MichaelJ");
         PhotoId photoId = factory.createProjection(PhotoId.class);
         SoundtrackName trackName = factory.createProjection(SoundtrackName.class);
         Format format = new Format(1L, "2LP");
         Genre genre = new Genre(1L, "Pop-Rock");
-        artistName.setName("MichaelJ");
         trackName.setName("Billy jeans");
         photoId.setId(1L);
         vinylDetails.setId(0L);
         vinylDetails.setName("Moonwalk");
         vinylDetails.setDescription("Legendary album of legendary artist");
         vinylDetails.setPrice(20.99);
-        vinylDetails.setArtists(List.of(artistName));
+        vinylDetails.setArtists(List.of(artistShort));
         vinylDetails.setGenres(List.of(genre));
         vinylDetails.setFormat(format);
         vinylDetails.setInStock(true);
@@ -68,7 +73,7 @@ public class VinylServiceTest {
         vinylDto.setName("Moonwalk");
         vinylDto.setDescription("Legendary album of legendary artist");
         vinylDto.setPrice(20.99);
-        vinylDto.setArtists(List.of(artistName));
+        vinylDto.setArtists(List.of(artistShort));
         vinylDto.setGenres(List.of(genre));
         vinylDto.setFormat(format);
         vinylDto.setInStock(true);
@@ -92,27 +97,21 @@ public class VinylServiceTest {
     }
 
     @Test
-    public void testGetVinylLightList() {
+    public void testGetVinylShortList() {
         //given
         Pageable pageable = PageRequest.of(0, 50);
-        List<VinylLight> vinylLights = new ArrayList<>();
-        List<VinylLightDto> vinylLightDtos = new ArrayList<>();
-        for (int i = 0; i < 3; i++){
-            VinylLight vinylLight = factory.createProjection(VinylLight.class);
-            vinylLight.setId((long) i);
-            vinylLight.setName("Vinyl #"+i);
-            vinylLights.add(vinylLight);
-            VinylLightDto vinylLightDto = new VinylLightDto();
-            vinylLightDto.setId((long) i);
-            vinylLightDto.setName("Vinyl #"+i);
-            vinylLightDtos.add(vinylLightDto);
+        List<VinylShort> vinylShorts = new ArrayList<>();
+        for (long i = 0; i < 3; i++){
+            vinylShorts.add(new VinylShort(i, "Vinyl #"+i,
+                    null, null, null, null));
         }
+        Page<VinylShort> page = new PageImpl<>(vinylShorts);
+
         //when
-        when(vinylRepository.findAllProjectedBy(pageable, VinylLight.class)).thenReturn(vinylLights);
-        when(orikaMapper.mapAsList(vinylLights, VinylLightDto.class)).thenReturn(vinylLightDtos);
+        when(vinylShortRepository.findAll(pageable)).thenReturn(page);
         //then
-        assertEquals(3, vinylService.getVinylsLight(0).size());
-        assertEquals(vinylLightDtos, vinylService.getVinylsLight(0));
+        assertEquals(3, vinylService.getVinylsShort(0).size());
+        assertEquals(vinylShorts, vinylService.getVinylsShort(0));
     }
 
 }

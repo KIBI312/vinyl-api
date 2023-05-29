@@ -1,15 +1,15 @@
 package com.seitov.vinylapi.service;
 
 import com.seitov.vinylapi.dto.ResourceId;
-import com.seitov.vinylapi.dto.VinylLightDto;
 import com.seitov.vinylapi.entity.Genre;
+import com.seitov.vinylapi.entity.VinylShort;
 import com.seitov.vinylapi.exception.DataConstraintViolationException;
 import com.seitov.vinylapi.exception.RedundantPropertyException;
 import com.seitov.vinylapi.exception.ResourceAlreadyExistsException;
 import com.seitov.vinylapi.exception.ResourceNotFoundException;
-import com.seitov.vinylapi.projection.VinylLight;
 import com.seitov.vinylapi.repository.GenreRepository;
 import com.seitov.vinylapi.repository.VinylRepository;
+import com.seitov.vinylapi.repository.VinylShortRepository;
 import ma.glasnost.orika.MapperFacade;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +20,14 @@ public class GenreService {
 
     private final GenreRepository genreRepository;
     private final VinylRepository vinylRepository;
+    private final VinylShortRepository vinylShortRepository;
     private final MapperFacade orikaMapper;
 
-    public GenreService(GenreRepository genreRepository, VinylRepository vinylRepository, MapperFacade orikaMapper) {
+    public GenreService(GenreRepository genreRepository, VinylRepository vinylRepository,
+                        VinylShortRepository vinylShortRepository, MapperFacade orikaMapper) {
         this.genreRepository = genreRepository;
         this.vinylRepository = vinylRepository;
+        this.vinylShortRepository = vinylShortRepository;
         this.orikaMapper = orikaMapper;
     }
 
@@ -32,8 +35,8 @@ public class GenreService {
         return genreRepository.findAll();
     }
 
-    public List<VinylLightDto> getVinylsLightByGenre(Long id) {
-        return orikaMapper.mapAsList(vinylRepository.readByGenres_Id(id, VinylLight.class), VinylLightDto.class);
+    public List<VinylShort> getVinylsShortByGenre(Long id) {
+        return vinylShortRepository.findAllByGenres_Id(id);
     }
 
     public ResourceId createGenre(Genre genre) {

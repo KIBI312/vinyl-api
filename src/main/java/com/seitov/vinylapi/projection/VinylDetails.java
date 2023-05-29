@@ -1,5 +1,6 @@
 package com.seitov.vinylapi.projection;
 
+import com.seitov.vinylapi.entity.ArtistShort;
 import com.seitov.vinylapi.entity.Format;
 import com.seitov.vinylapi.entity.Genre;
 
@@ -11,7 +12,7 @@ public interface VinylDetails {
     String getName();
     String getDescription();
     Double getPrice();
-    List<ArtistName> getArtists();
+    List<ArtistShort> getArtists();
     List<Genre> getGenres();
     Format getFormat();
     Boolean getInStock();
@@ -23,7 +24,7 @@ public interface VinylDetails {
     void setName(String name);
     void setDescription(String description);
     void setPrice(Double price);
-    void setArtists(List<ArtistName> artists);
+    void setArtists(List<ArtistShort> artists);
     void setGenres(List<Genre> genres);
     void setFormat(Format format);
     void setInStock(Boolean inStock);
