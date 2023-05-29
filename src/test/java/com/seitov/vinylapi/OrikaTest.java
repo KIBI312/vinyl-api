@@ -2,7 +2,7 @@ package com.seitov.vinylapi;
 
 import com.seitov.vinylapi.dto.ArtistDto;
 import com.seitov.vinylapi.dto.VinylDto;
-import com.seitov.vinylapi.dto.VinylLightDto;
+import com.seitov.vinylapi.entity.ArtistShort;
 import com.seitov.vinylapi.entity.Format;
 import com.seitov.vinylapi.entity.Genre;
 import com.seitov.vinylapi.projection.*;
@@ -29,12 +29,11 @@ public class OrikaTest {
     public void testVinylDetailsToVinylDto() {
         //given
         VinylDetails vinylDetails = factory.createProjection(VinylDetails.class);
-        ArtistName artistName = factory.createProjection(ArtistName.class);
+        ArtistShort artistName = new ArtistShort(1L, "MichaelJ");
         PhotoId photoId = factory.createProjection(PhotoId.class);
         SoundtrackName trackName = factory.createProjection(SoundtrackName.class);
         Format format = new Format(1L, "2LP");
         Genre genre = new Genre(1L, "Pop-Rock");
-        artistName.setName("MichaelJ");
         trackName.setName("Billy jeans");
         photoId.setId(1L);
         vinylDetails.setId(0L);
@@ -63,33 +62,6 @@ public class OrikaTest {
         vinylDto.setPhotoId(1L);
         //then
         assertEquals(vinylDto, orikaMapper.map(vinylDetails, VinylDto.class));
-    }
-
-    @Test
-    public void testVinylLightToVinylLightDto() {
-        //given
-        VinylLight vinylLight = factory.createProjection(VinylLight.class);
-        ArtistName artistName = factory.createProjection(ArtistName.class);
-        PhotoId photoId = factory.createProjection(PhotoId.class);
-        Format format = new Format(1L, "2LP");
-        artistName.setName("MichaelJ");
-        photoId.setId(1L);
-        vinylLight.setId(0L);
-        vinylLight.setName("Moonwalk");
-        vinylLight.setPrice(20.99);
-        vinylLight.setFormat(format);
-        vinylLight.setArtists(List.of(artistName));
-        vinylLight.setPhotoLowRes(photoId);
-
-        VinylLightDto vinylLightDto = new VinylLightDto();
-        vinylLightDto.setId(0L);
-        vinylLightDto.setName("Moonwalk");
-        vinylLightDto.setPrice(20.99);
-        vinylLightDto.setFormat(format);
-        vinylLightDto.setArtists(List.of(artistName));
-        vinylLightDto.setPhotoId(1L);
-        //then
-        assertEquals(vinylLightDto, orikaMapper.map(vinylLight, VinylLightDto.class));
     }
 
     @Test
