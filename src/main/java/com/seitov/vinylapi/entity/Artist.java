@@ -22,5 +22,7 @@ public class Artist {
     private String description;
     @OneToOne(fetch = FetchType.LAZY)
     private Image photo;
+    @Column(name = "photo_id", updatable = false, insertable = false)
+    private Long photoId;
 
 }

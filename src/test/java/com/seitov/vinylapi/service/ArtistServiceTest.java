@@ -9,6 +9,7 @@ import com.seitov.vinylapi.exception.RedundantPropertyException;
 import com.seitov.vinylapi.exception.ResourceAlreadyExistsException;
 import com.seitov.vinylapi.repository.ArtistRepository;
 import com.seitov.vinylapi.repository.ImageRepository;
+import ma.glasnost.orika.MapperFacade;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,6 +27,8 @@ public class ArtistServiceTest {
     private ArtistRepository artistRepository;
     @Mock
     private ImageRepository imageRepository;
+    @Mock
+    private MapperFacade orikaMapper;
 
     @InjectMocks
     private ArtistService artistService;
@@ -36,13 +39,17 @@ public class ArtistServiceTest {
         ArtistDto artistDto = new ArtistDto(null, "Jake", "SomeArtist", 1L);
         Image image = new Image();
         image.setId(1L);
-        Artist toCreate = new Artist(null, "Jake", "SomeArtist", image);
-        Artist created = new Artist(0L, "Jake", "SomeArtist", image);
+        Artist toCreate = new Artist();
+        toCreate.setName("Jake");
+        toCreate.setDescription("SomeArtist");
+        toCreate.setPhotoId(1L);
+        Artist created = new Artist(0L, "Jake", "SomeArtist", image, 1L);
         ResourceId createdId = new ResourceId(0L);
         //when
         when(imageRepository.existsById(1L)).thenReturn(true);
         when(artistRepository.existsByName("Jake")).thenReturn(false);
         when(imageRepository.getReferenceById(1L)).thenReturn(image);
+        when(orikaMapper.map(artistDto, Artist.class)).thenReturn(toCreate);
         when(artistRepository.save(toCreate)).thenReturn(created);
         //then
         assertEquals(createdId, artistService.createArtist(artistDto));

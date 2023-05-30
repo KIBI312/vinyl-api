@@ -2,6 +2,7 @@ package com.seitov.vinylapi.config;
 
 import com.seitov.vinylapi.dto.ArtistDto;
 import com.seitov.vinylapi.dto.VinylDto;
+import com.seitov.vinylapi.entity.Artist;
 import com.seitov.vinylapi.projection.*;
 import ma.glasnost.orika.CustomMapper;
 import ma.glasnost.orika.MapperFacade;
@@ -39,16 +40,12 @@ public class OrikaMapperConfig {
                         vinylDto.setPhotoId(vinylDetails.getPhotoHighRes().getId());
                     }
                 }).register();
-        mapperFactory.classMap(ArtistDetails.class, ArtistDto.class).customize(new CustomMapper<ArtistDetails, ArtistDto>() {
-            @Override
-            public void mapAtoB(ArtistDetails artistDetails, ArtistDto artistDto, MappingContext context) {
-                artistDto.setId(artistDetails.getId());
-                artistDto.setName(artistDetails.getName());
-                artistDto.setDescription(artistDetails.getDescription());
-                artistDto.setPhotoId(artistDetails.getPhoto().getId());
-            }
-        }).register();
+        mapperFactory.classMap(Artist.class, ArtistDto.class)
+                .exclude("photo")
+                .byDefault().register();
         return mapperFactory.getMapperFacade();
     }
+
+
 
 }

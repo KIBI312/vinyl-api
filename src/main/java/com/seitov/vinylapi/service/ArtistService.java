@@ -8,7 +8,6 @@ import com.seitov.vinylapi.exception.DataConstraintViolationException;
 import com.seitov.vinylapi.exception.RedundantPropertyException;
 import com.seitov.vinylapi.exception.ResourceAlreadyExistsException;
 import com.seitov.vinylapi.exception.ResourceNotFoundException;
-import com.seitov.vinylapi.projection.ArtistDetails;
 import com.seitov.vinylapi.repository.ArtistRepository;
 import com.seitov.vinylapi.repository.ImageRepository;
 import com.seitov.vinylapi.repository.VinylRepository;
@@ -41,7 +40,7 @@ public class ArtistService {
 
     public List<ArtistDto> getArtists(Integer page) {
         Pageable pageable = PageRequest.of(page, 50);
-        return orikaMapper.mapAsList(artistRepository.findAllProjectedBy(pageable, ArtistDetails.class), ArtistDto.class);
+        return orikaMapper.mapAsList(artistRepository.findAll(pageable),ArtistDto.class);
     }
 
     public List<VinylShort> getVinylsShortByArtist(Long id) {
@@ -58,9 +57,7 @@ public class ArtistService {
         if(artistRepository.existsByName(artistDto.getName())) {
             throw new ResourceAlreadyExistsException("Artist with this name already exists");
         }
-        Artist artist = new Artist();
-        artist.setName(artistDto.getName());
-        artist.setDescription(artistDto.getDescription());
+        Artist artist = orikaMapper.map(artistDto, Artist.class);
         artist.setPhoto(imageRepository.getReferenceById(artistDto.getPhotoId()));
         Long id = artistRepository.save(artist).getId();
         return new ResourceId(id);

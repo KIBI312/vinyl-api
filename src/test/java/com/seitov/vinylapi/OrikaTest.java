@@ -2,9 +2,7 @@ package com.seitov.vinylapi;
 
 import com.seitov.vinylapi.dto.ArtistDto;
 import com.seitov.vinylapi.dto.VinylDto;
-import com.seitov.vinylapi.entity.ArtistShort;
-import com.seitov.vinylapi.entity.Format;
-import com.seitov.vinylapi.entity.Genre;
+import com.seitov.vinylapi.entity.*;
 import com.seitov.vinylapi.projection.*;
 import ma.glasnost.orika.MapperFacade;
 import org.junit.jupiter.api.Test;
@@ -65,15 +63,14 @@ public class OrikaTest {
     }
 
     @Test
-    public void testArtistDetailsToArtistDto() {
+    public void testArtistToArtistDto() {
         //given
-        ArtistDetails artistDetails = factory.createProjection(ArtistDetails.class);
-        PhotoId photoId = factory.createProjection(PhotoId.class);
-        photoId.setId(1L);
-        artistDetails.setId(0L);
-        artistDetails.setName("MichaelJ");
-        artistDetails.setDescription("Legendary legend of pop and rock");
-        artistDetails.setPhoto(photoId);
+        Artist artist = new Artist();
+        artist.setId(0L);
+        artist.setName("MichaelJ");
+        artist.setDescription("Legendary legend of pop and rock");
+        artist.setPhoto(new Image(1L, null));
+        artist.setPhotoId(1L);
 
         ArtistDto artistDto = new ArtistDto();
         artistDto.setId(0L);
@@ -81,11 +78,26 @@ public class OrikaTest {
         artistDto.setDescription("Legendary legend of pop and rock");
         artistDto.setPhotoId(1L);
         //then
-        assertEquals(artistDto, orikaMapper.map(artistDetails, ArtistDto.class));
-
+        assertEquals(artistDto, orikaMapper.map(artist, ArtistDto.class));
     }
 
+    @Test
+    public void testArtistDtoToArtist() {
+        //given
+        ArtistDto artistDto = new ArtistDto();
+        artistDto.setId(0L);
+        artistDto.setName("MichaelJ");
+        artistDto.setDescription("Legendary legend of pop and rock");
+        artistDto.setPhotoId(1L);
 
+        Artist artist = new Artist();
+        artist.setId(0L);
+        artist.setName("MichaelJ");
+        artist.setDescription("Legendary legend of pop and rock");
+        artist.setPhotoId(1L);
+        //then
+        assertEquals(artist, orikaMapper.map(artistDto, Artist.class));
+    }
 
 
 }
