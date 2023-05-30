@@ -3,7 +3,6 @@ package com.seitov.vinylapi;
 import com.seitov.vinylapi.dto.ArtistDto;
 import com.seitov.vinylapi.dto.VinylDto;
 import com.seitov.vinylapi.entity.*;
-import com.seitov.vinylapi.projection.*;
 import ma.glasnost.orika.MapperFacade;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,40 +25,37 @@ public class OrikaTest {
     @Test
     public void testVinylDetailsToVinylDto() {
         //given
-        VinylDetails vinylDetails = factory.createProjection(VinylDetails.class);
-        ArtistShort artistName = new ArtistShort(1L, "MichaelJ");
-        PhotoId photoId = factory.createProjection(PhotoId.class);
-        SoundtrackName trackName = factory.createProjection(SoundtrackName.class);
+        Vinyl vinyl = new Vinyl();
+        ArtistShort artistShort = new ArtistShort(1L, "MichaelJ");
+        Soundtrack soundtrack = new Soundtrack(1L, "Billy jeans");
         Format format = new Format(1L, "2LP");
         Genre genre = new Genre(1L, "Pop-Rock");
-        trackName.setName("Billy jeans");
-        photoId.setId(1L);
-        vinylDetails.setId(0L);
-        vinylDetails.setName("Moonwalk");
-        vinylDetails.setDescription("Legendary album of legendary artist");
-        vinylDetails.setPrice(20.99);
-        vinylDetails.setArtists(List.of(artistName));
-        vinylDetails.setGenres(List.of(genre));
-        vinylDetails.setFormat(format);
-        vinylDetails.setInStock(true);
-        vinylDetails.setRecordLabel("EMI");
-        vinylDetails.setTrackList(List.of(trackName));
-        vinylDetails.setPhotoHighRes(photoId);
+        vinyl.setId(0L);
+        vinyl.setName("Moonwalk");
+        vinyl.setDescription("Legendary album of legendary artist");
+        vinyl.setPrice(20.99);
+        vinyl.setArtists(List.of(artistShort));
+        vinyl.setGenres(List.of(genre));
+        vinyl.setFormat(format);
+        vinyl.setInStock(true);
+        vinyl.setRecordLabel("EMI");
+        vinyl.setTrackList(List.of(soundtrack));
+        vinyl.setPhotoId(1L);
 
         VinylDto vinylDto = new VinylDto();
         vinylDto.setId(0L);
         vinylDto.setName("Moonwalk");
         vinylDto.setDescription("Legendary album of legendary artist");
         vinylDto.setPrice(20.99);
-        vinylDto.setArtists(List.of(artistName));
+        vinylDto.setArtists(List.of(artistShort));
         vinylDto.setGenres(List.of(genre));
         vinylDto.setFormat(format);
         vinylDto.setInStock(true);
         vinylDto.setRecordLabel("EMI");
-        vinylDto.setTrackList(List.of("Billy jeans"));
+        vinylDto.setTrackList(List.of(soundtrack));
         vinylDto.setPhotoId(1L);
         //then
-        assertEquals(vinylDto, orikaMapper.map(vinylDetails, VinylDto.class));
+        assertEquals(vinylDto, orikaMapper.map(vinyl, VinylDto.class));
     }
 
     @Test

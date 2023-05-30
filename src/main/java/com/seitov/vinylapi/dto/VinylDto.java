@@ -3,6 +3,7 @@ package com.seitov.vinylapi.dto;
 import com.seitov.vinylapi.entity.ArtistShort;
 import com.seitov.vinylapi.entity.Format;
 import com.seitov.vinylapi.entity.Genre;
+import com.seitov.vinylapi.entity.Soundtrack;
 import lombok.Data;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class VinylDto {
     private Format format;
     private Boolean inStock;
     private String recordLabel;
-    private List<String> trackList;
+    private List<Soundtrack> trackList;
     private Long photoId;
 
 }

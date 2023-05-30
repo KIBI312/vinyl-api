@@ -1,10 +1,7 @@
 package com.seitov.vinylapi.controller;
 
 import com.seitov.vinylapi.dto.VinylDto;
-import com.seitov.vinylapi.entity.ArtistShort;
-import com.seitov.vinylapi.entity.Format;
-import com.seitov.vinylapi.entity.Genre;
-import com.seitov.vinylapi.entity.VinylShort;
+import com.seitov.vinylapi.entity.*;
 import com.seitov.vinylapi.exception.ResourceNotFoundException;
 import com.seitov.vinylapi.service.VinylService;
 import org.junit.jupiter.api.Test;
@@ -12,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 import org.springframework.test.web.servlet.MockMvc;
@@ -86,7 +81,7 @@ public class VinylControllerTest {
         vinylDto.setFormat(format);
         vinylDto.setInStock(true);
         vinylDto.setRecordLabel("EMI");
-        vinylDto.setTrackList(List.of("Billy jeans", "Smooth criminal"));
+        vinylDto.setTrackList(List.of(new Soundtrack(1L, "Smooth criminal"), new Soundtrack(2L, "Billy jean")));
         vinylDto.setPhotoId(1L);
         //when
         when(vinylService.getVinylById(0L)).thenReturn(vinylDto);

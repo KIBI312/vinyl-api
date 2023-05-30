@@ -29,7 +29,7 @@ public class Vinyl {
     @ManyToMany
     private List<Genre> genres;
     @ManyToMany
-    private List<Artist> artists;
+    private List<ArtistShort> artists;
     @ManyToMany
     @JoinTable(name = "vinyl_soundtrack",
             joinColumns = @JoinColumn(name = "vinyl_id"),
@@ -39,5 +39,7 @@ public class Vinyl {
     private Image photoLowRes;
     @ManyToOne(fetch = FetchType.LAZY)
     private Image photoHighRes;
+    @Column(name = "photo_high_res_id", updatable = false, insertable = false)
+    private Long photoId;
 
 }

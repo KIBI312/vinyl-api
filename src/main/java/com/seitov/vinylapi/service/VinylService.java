@@ -1,9 +1,9 @@
 package com.seitov.vinylapi.service;
 
 import com.seitov.vinylapi.dto.VinylDto;
+import com.seitov.vinylapi.entity.Vinyl;
 import com.seitov.vinylapi.entity.VinylShort;
 import com.seitov.vinylapi.exception.ResourceNotFoundException;
-import com.seitov.vinylapi.projection.VinylDetails;
 import com.seitov.vinylapi.repository.VinylRepository;
 import com.seitov.vinylapi.repository.VinylShortRepository;
 import ma.glasnost.orika.MapperFacade;
@@ -34,11 +34,11 @@ public class VinylService {
     }
 
     public VinylDto getVinylById(Long id) {
-        Optional<VinylDetails> vinylDetails = vinylRepository.readById(id, VinylDetails.class);
-        if(vinylDetails.isEmpty()) {
+        Optional<Vinyl> vinyl = vinylRepository.findById(id);
+        if(vinyl.isEmpty()) {
             throw new ResourceNotFoundException("Vinyl with this id doesn't exist");
         }
-        return orikaMapper.map(vinylDetails.get(), VinylDto.class);
+        return orikaMapper.map(vinyl.get(), VinylDto.class);
     }
 
 }
