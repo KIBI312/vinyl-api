@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.projection.ProjectionFactory;
-import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
@@ -32,8 +30,6 @@ public class VinylControllerTest {
 
     @MockBean
     private VinylService vinylService;
-
-    private final ProjectionFactory factory = new SpelAwareProxyProjectionFactory();
 
     @Test
     public void getAllVinyls() throws Exception {

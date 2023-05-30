@@ -7,8 +7,6 @@ import ma.glasnost.orika.MapperFacade;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.data.projection.ProjectionFactory;
-import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 
 import java.util.List;
 
@@ -19,8 +17,6 @@ public class OrikaTest {
 
     @SpyBean
     private MapperFacade orikaMapper;
-
-    private final ProjectionFactory factory = new SpelAwareProxyProjectionFactory();
 
     @Test
     public void testVinylDetailsToVinylDto() {
@@ -94,6 +90,5 @@ public class OrikaTest {
         //then
         assertEquals(artist, orikaMapper.map(artistDto, Artist.class));
     }
-
 
 }

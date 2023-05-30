@@ -15,8 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.projection.ProjectionFactory;
-import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +36,6 @@ public class VinylServiceTest {
 
     @InjectMocks
     private VinylService vinylService;
-
-    private final ProjectionFactory factory = new SpelAwareProxyProjectionFactory();
 
     @Test
     public void testGetVinylById() {
