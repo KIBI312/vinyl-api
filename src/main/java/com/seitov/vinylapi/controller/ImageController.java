@@ -51,4 +51,19 @@ public class ImageController {
         return imageService.createPhoto(imageContent);
     }
 
+    @Operation(description = "Deletes photo", tags = "photo")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", content =
+            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = ResponseMessage.class))),
+            @ApiResponse(responseCode = "404", description = "Trying to delete non-existing genre",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ResponseMessage.class)))})
+    @DeleteMapping(value = "/{id}")
+    public ResponseMessage deletePhoto(@PathVariable Long id) {
+        imageService.deletePhoto(id);
+        return new ResponseMessage(200, "SUCCESSFUL_DELETION",
+                "Photo with id " + id + " was deleted!");
+    }
+
 }
