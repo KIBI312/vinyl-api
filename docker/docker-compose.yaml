@@ -11,6 +11,17 @@ services:
       - POSTGRES_DB=vinylApi
     networks:
       - vinylApi
+  test-db:
+    image: postgres
+    container_name: test-pgdb
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=${POSTGRES_PASS}
+      - POSTGRES_DB=vinylApi
+    networks:
+      - vinylApi
 networks:
   vinylApi:
     name: vinylApi
