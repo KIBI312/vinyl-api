@@ -3,7 +3,7 @@ package com.seitov.vinylapi.controller;
 import com.seitov.vinylapi.dto.ArtistDto;
 import com.seitov.vinylapi.dto.ResourceId;
 import com.seitov.vinylapi.dto.ResponseMessage;
-import com.seitov.vinylapi.dto.VinylLightDto;
+import com.seitov.vinylapi.entity.VinylShort;
 import com.seitov.vinylapi.service.ArtistService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -44,10 +44,10 @@ public class ArtistController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", content =
             @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    array = @ArraySchema(schema = @Schema(implementation = VinylLightDto.class))))})
+                    array = @ArraySchema(schema = @Schema(implementation = VinylShort.class))))})
     @GetMapping("/{id}/vinyls")
-    public List<VinylLightDto> getVinylsByArtist(@PathVariable Long id) {
-        return artistService.getVinylsLightByArtist(id);
+    public List<VinylShort> getVinylsByArtist(@PathVariable Long id) {
+        return artistService.getVinylsShortByArtist(id);
     }
 
     @Operation(description = "Creates new Artist resource", tags = "artist")

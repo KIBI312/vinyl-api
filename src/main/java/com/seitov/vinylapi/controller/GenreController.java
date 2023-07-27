@@ -2,8 +2,8 @@ package com.seitov.vinylapi.controller;
 
 import com.seitov.vinylapi.dto.ResourceId;
 import com.seitov.vinylapi.dto.ResponseMessage;
-import com.seitov.vinylapi.dto.VinylLightDto;
 import com.seitov.vinylapi.entity.Genre;
+import com.seitov.vinylapi.entity.VinylShort;
 import com.seitov.vinylapi.service.GenreService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -40,10 +40,10 @@ public class GenreController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", content =
             @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    array = @ArraySchema(schema = @Schema(implementation = VinylLightDto.class))))})
+                    array = @ArraySchema(schema = @Schema(implementation = VinylShort.class))))})
     @GetMapping("/{id}/vinyls")
-    public List<VinylLightDto> getVinylsByGenre(@PathVariable Long id) {
-        return genreService.getVinylsLightByGenre(id);
+    public List<VinylShort> getVinylsByGenre(@PathVariable Long id) {
+        return genreService.getVinylsShortByGenre(id);
     }
 
     @Operation(description = "Creates new genre resource", tags = "genre")

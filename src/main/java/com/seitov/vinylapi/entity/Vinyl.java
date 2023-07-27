@@ -12,6 +12,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "vinyl")
 public class Vinyl {
 
     @Id
@@ -28,15 +29,17 @@ public class Vinyl {
     @ManyToMany
     private List<Genre> genres;
     @ManyToMany
-    private List<Artist> artists;
+    private List<ArtistShort> artists;
     @ManyToMany
     @JoinTable(name = "vinyl_soundtrack",
             joinColumns = @JoinColumn(name = "vinyl_id"),
             inverseJoinColumns = @JoinColumn(name = "soundtrack_id"))
     private List<Soundtrack> trackList;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Image photoLowRes;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Image photoHighRes;
+    @Column(name = "photo_high_res_id", updatable = false, insertable = false)
+    private Long photoId;
 
 }

@@ -1,7 +1,7 @@
 package com.seitov.vinylapi.controller;
 
-import com.seitov.vinylapi.dto.VinylLightDto;
 import com.seitov.vinylapi.entity.Format;
+import com.seitov.vinylapi.entity.VinylShort;
 import com.seitov.vinylapi.service.FormatService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -41,10 +41,10 @@ public class FormatController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", content =
             @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    array = @ArraySchema(schema = @Schema(implementation = VinylLightDto.class))))})
+                    array = @ArraySchema(schema = @Schema(implementation = VinylShort.class))))})
     @GetMapping("/{id}/vinyls")
-    public List<VinylLightDto> getVinylsByFormat(@PathVariable Long id) {
-        return formatService.getVinylsLightByFormat(id);
+    public List<VinylShort> getVinylsByFormat(@PathVariable Long id) {
+        return formatService.getVinylsShortByFormat(id);
     }
 
 }
