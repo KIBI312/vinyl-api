@@ -80,4 +80,15 @@ public class ImageServiceTest {
         assertEquals("Error occurred during image processing", ex.getMessage());
     }
 
+    @Test
+    public void nonExistingPhotoDeletionTest() {
+        //given
+        Long id = 1L;
+        //when
+        when(imageRepository.existsById(id)).thenReturn(false);
+        //then
+        Exception ex = assertThrows(ResourceNotFoundException.class, () -> imageService.deletePhoto(1L));
+        assertEquals("Photo with this id doesn't exist", ex.getMessage());
+    }
+
 }
