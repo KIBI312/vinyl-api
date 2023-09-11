@@ -1,7 +1,9 @@
 package com.seitov.vinylapi.controller;
 
+import com.seitov.vinylapi.DatabaseContainer;
 import com.seitov.vinylapi.dto.ResourceId;
 import com.seitov.vinylapi.service.ImageService;
+import org.junit.ClassRule;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -9,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
+import org.testcontainers.containers.PostgreSQLContainer;
 
 import java.util.Random;
 
@@ -21,6 +24,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class ImageControllerTest {
+
+    @ClassRule
+    public static PostgreSQLContainer postgreSQLContainer = DatabaseContainer.getInstance();
+
 
     @Autowired
     private MockMvc mockMvc;

@@ -1,5 +1,6 @@
 package com.seitov.vinylapi.controller;
 
+import com.seitov.vinylapi.DatabaseContainer;
 import com.seitov.vinylapi.dto.ResourceId;
 import com.seitov.vinylapi.entity.Genre;
 import com.seitov.vinylapi.exception.DataConstraintViolationException;
@@ -8,6 +9,7 @@ import com.seitov.vinylapi.exception.ResourceAlreadyExistsException;
 import com.seitov.vinylapi.exception.ResourceNotFoundException;
 import com.seitov.vinylapi.service.GenreService;
 import org.json.JSONObject;
+import org.junit.ClassRule;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -15,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.testcontainers.containers.PostgreSQLContainer;
 
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.doThrow;
@@ -27,6 +30,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class GenreControllerTest {
+
+    @ClassRule
+    public static PostgreSQLContainer postgreSQLContainer = DatabaseContainer.getInstance();
 
     @Autowired
     private MockMvc mockMvc;

@@ -4,9 +4,11 @@ import com.seitov.vinylapi.dto.ArtistDto;
 import com.seitov.vinylapi.dto.VinylDto;
 import com.seitov.vinylapi.entity.*;
 import ma.glasnost.orika.MapperFacade;
+import org.junit.ClassRule;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.testcontainers.containers.PostgreSQLContainer;
 
 import java.util.List;
 
@@ -14,6 +16,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 public class OrikaTest {
+
+    @ClassRule
+    public static PostgreSQLContainer postgreSQLContainer = DatabaseContainer.getInstance();
 
     @SpyBean
     private MapperFacade orikaMapper;
