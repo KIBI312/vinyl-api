@@ -3,9 +3,9 @@ spring:
     cache: false
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${DB_HOSTNAME}:5432/vinylApi
+    url: jdbc:postgresql://localhost:5432/vinylApi
     username: user
-    password: ${DB_PASSWORD}
+    password: password
   jpa:
     hibernate:
       ddl-auto: update
